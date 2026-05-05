@@ -234,4 +234,5 @@ documentación, ejemplos compilados y galería pre-renderizada.
 - Cualquier macro que se renombre o retire se documentará en este
   changelog con un aviso de **deprecation** al menos un release antes.
 
-[0.1.0]: https://github.com/MevakeshEmetGPT/claudeeditorial-latex/releases/tag/v0.1.0
+[0.2.0]: https://github.com/patri-png/Claude-Editorial-LaTeX/releases/tag/v0.2.0
+[0.1.0]: https://github.com/patri-png/Claude-Editorial-LaTeX/releases/tag/v0.1.0

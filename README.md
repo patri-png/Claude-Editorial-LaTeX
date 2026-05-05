@@ -15,7 +15,7 @@ demostraciones y bibliografía. Compila igual en MiKTeX, TeX Live, MacTeX y
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](LICENSE)
 [![LaTeX: XeLaTeX](https://img.shields.io/badge/LaTeX-XeLaTeX-008080.svg)](#requisitos)
 [![Build: latexmk](https://img.shields.io/badge/build-latexmk-1f5d6b.svg)](latexmkrc)
-[![Open in Overleaf](https://img.shields.io/badge/Open%20in-Overleaf-47A141.svg?logo=overleaf)](#overleaf)
+[![Open in Overleaf](https://img.shields.io/badge/Open%20in-Overleaf-47A141.svg?logo=overleaf)](https://www.overleaf.com/docs?snip_uri=https://github.com/patri-png/Claude-Editorial-LaTeX/archive/refs/heads/main.zip)
 [![Status: public template](https://img.shields.io/badge/status-public%20template-c96442.svg)](#proyecto-no-oficial)
 [![Made with: tcolorbox + TikZ](https://img.shields.io/badge/made%20with-tcolorbox%20%2B%20TikZ-87867f.svg)](#dependencias-latex)
 
@@ -215,8 +215,8 @@ del kit.
 ## Inicio rápido
 
 ```bash
-git clone https://github.com/<tu-usuario>/claudeeditorial-latex.git
-cd claudeeditorial-latex
+git clone https://github.com/patri-png/Claude-Editorial-LaTeX.git
+cd Claude-Editorial-LaTeX
 
 # Compilación recomendada (latexmk gestiona pasadas y biber)
 latexmk main.tex
@@ -269,11 +269,11 @@ y los siete documentos de la galería.
 4. Pulsa **Recompile** sobre cualquiera de los `.tex` (main, examples
    o aphorisms).
 
-> Atajo con badge: cuando el repositorio esté publicado, el botón
-> [![Open in Overleaf](https://img.shields.io/badge/Open%20in-Overleaf-47A141.svg?logo=overleaf)](https://www.overleaf.com/docs?snip_uri=https://github.com/MevakeshEmetGPT/claudeeditorial-latex/archive/refs/heads/main.zip)
+> Atajo con badge: el botón
+> [![Open in Overleaf](https://img.shields.io/badge/Open%20in-Overleaf-47A141.svg?logo=overleaf)](https://www.overleaf.com/docs?snip_uri=https://github.com/patri-png/Claude-Editorial-LaTeX/archive/refs/heads/main.zip)
 > abre el ZIP directamente en un proyecto nuevo de Overleaf
-> (sustituye `MevakeshEmetGPT/claudeeditorial-latex` por tu fork si
-> haces uno propio).
+> (sustituye `patri-png/Claude-Editorial-LaTeX` por tu fork si haces
+> uno propio).
 
 **Notas Overleaf-específicas:**
 
