@@ -1,0 +1,269 @@
+% =============================================================================
+%  EGARCH: del código a la fórmula — revelando la matemática oculta
+%  Portado al sistema visual claudeeditorial: VBA en ClaudeCode, math
+%  en ClaudeCard/ClaudeInfo, leverage chart con pgfplots y la paleta.
+%  Compilacion: xelatex aphorisms/egarch-codigo-formula.tex
+% =============================================================================
+\documentclass{claudeeditorial}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\renewcommand{\DocKicker}{Ingeniería de prompts · Curso 2025/2026}
+\renewcommand{\DocTitle}{EGARCH: del código a la fórmula}
+\renewcommand{\DocSubtitle}{Revelando la matemática oculta — biyección VBA $\leftrightarrow$ econometría financiera}
+\renewcommand{\DocAuthor}{Patricio Hernández Ballester · @MevakeshEmetGPT}
+\renewcommand{\DocRole}{Ingeniero de prompts}
+\renewcommand{\DocDate}{1 de febrero de 2026}
+\renewcommand{\DocRef}{EGARCH-001}
+\renewcommand{\DocFooter}{claudeeditorial · EGARCH}
+
+\renewcommand{\ProjectName}{Volatilidad asimétrica}
+\renewcommand{\ProjectPhase}{MLE con $t$-Student}
+\renewcommand{\ProjectStatus}{Nelson (1991)}
+
+\hypersetup{
+  pdftitle={EGARCH - Del Codigo a la Formula},
+  pdfauthor={MevakeshEmetGPT},
+  pdfkeywords={EGARCH, volatilidad, VBA, MLE, econometría}
+}
+
+\ClaudeRunningHeader
+
+\begin{document}
+\BodyCopy
+\ClaudeCover
+
+\ClaudeChapterPage{00}{Resumen}{Cada instrucción VBA implementa un concepto de probabilidad, análisis funcional u optimización.}
+
+\begin{claudehero}
+\ClaudeLead{«Cada instrucción de bajo nivel implementa un concepto de probabilidad, análisis funcional u optimización. Este documento establece la biyección entre VBA y la teoría econométrica del modelo EGARCH(1,1) de Nelson.»}
+\end{claudehero}
+
+\begin{ClaudeCard}{Modelo EGARCH(1,1) — Nelson (1991)}
+\[
+  \boxed{\;\ln(\sigma_t^2) = \omega + \beta\ln(\sigma_{t-1}^2) + \alpha\bigl(\abs{z_{t-1}} - \E\abs{z}\bigr) + \gamma z_{t-1}\;}
+\]
+donde $z_t = \varepsilon_t / \sigma_t$ es el residuo estandarizado con $z_t \sim t_\nu(0,1)$.
+\end{ClaudeCard}
+
+\ClaudeChapterPage{01}{El código}{Forma abstracta — \texttt{Batch\_EGARCH}: estimación MLE por lotes.}
+
+\begin{ClaudeCode}[title={Sub P() — bucle MLE sobre todas las series con Solver}]{VBA}
+Sub P()
+Dim i&, n&
+n = ActiveWorkbook.Worksheets(1).Cells(1, 26).Value
+For i = 1 To n
+    ActiveWorkbook.Worksheets(1).Columns(i + 1).Copy _
+        Destination:=ActiveWorkbook.Worksheets(2).Columns(1)
+    With ActiveWorkbook.Worksheets(2)
+        .Cells(2, 8).Value = 0       ' mu
+        .Cells(3, 8).Value = -0.5    ' omega
+        .Cells(4, 8).Value = 0.1     ' alpha
+        .Cells(5, 8).Value = 0.8     ' beta
+        .Cells(6, 8).Value = 0       ' gamma
+        .Cells(7, 8).Value = 8       ' nu
+    End With
+    Application.Run "Solver.xlam!SolverReset"
+    Application.Run "Solver.xlam!SolverOk", _
+        ActiveWorkbook.Worksheets(2).Cells(13, 8), 1, , _
+        ActiveWorkbook.Worksheets(2).Range(Cells(2, 8), Cells(7, 8))
+    Application.Run "Solver.xlam!SolverAdd", Cells(4, 8), 3, "0"       ' alpha >= 0
+    Application.Run "Solver.xlam!SolverAdd", Cells(5, 8), 3, "0"       ' beta  >= 0
+    Application.Run "Solver.xlam!SolverAdd", Cells(8, 8), 1, "0.999"   ' alpha+beta <= 0.999
+    Application.Run "Solver.xlam!SolverAdd", Cells(7, 8), 3, "2.001"   ' nu > 2
+    Application.Run "Solver.xlam!SolverAdd", Cells(6, 8), 1, "1"       ' gamma <= 1
+    Application.Run "Solver.xlam!SolverAdd", Cells(6, 8), 3, "-1"      ' gamma >= -1
+    Application.Run "Solver.xlam!SolverOptions", , , , , , , , , , , 2, False
+    Application.Run "Solver.xlam!SolverSolve", True
+    ' ... persiste resultados en Worksheets(3) ...
+Next i
+End Sub
+\end{ClaudeCode}
+
+\begin{ClaudeInfo}[Notación del código]
+\texttt{Worksheets(1)} $\equiv$ datos · \texttt{Worksheets(2)} $\equiv$ modelo · \texttt{Worksheets(3)} $\equiv$ resultados. \texttt{Cells(r,c)} indexa fila $r$, columna $c$. El operador \texttt{\&} declara \texttt{Long}.
+\end{ClaudeInfo}
+
+\ClaudeChapterPage{02}{Correspondencia código $\leftrightarrow$ matemática}{Cada SolverAdd es una restricción del problema de optimización.}
+
+\begin{ClaudeTable}{@{}lL@{}}
+\ClaudeTableHeader Instrucción VBA & Significado matemático \\
+\toprule
+\texttt{Columns(i+1).Copy} & serie $\{r_t^{(i)}\}_{t=1}^T$ de rendimientos logarítmicos \\
+\texttt{Cells(2,8)..Cells(7,8)} & vector $\theta = (\mu,\omega,\alpha,\beta,\gamma,\nu)^\top \in \R^6$ \\
+\texttt{SolverOk(...,1,...)} & $\displaystyle\max_{\theta\in\Theta}\mathcal{L}(\theta)$ \\
+\texttt{Cells(13,8)} & $\mathcal{L}(\theta) = \sum_{t=1}^{T}\ell_t(\theta)$ (log-verosimilitud) \\
+\texttt{SolverAdd(...,3,"0")} & $\alpha\geq 0$, $\beta\geq 0$ \\
+\texttt{SolverAdd(...,1,"0.999")} & $\alpha+\beta\leq 0{,}999$ \\
+\texttt{SolverAdd(...,3,"2.001")} & $\nu>2$ (varianza finita de $t$-Student) \\
+\texttt{SolverAdd($\gamma$, $\pm 1$)} & $\gamma\in[-1,1]$ (leverage acotado) \\
+\texttt{SolverOptions(...,2,False)} & GRG nonlinear, $\theta\in\R^6$ no restringido a $\geq 0$ \\
+\texttt{SolverSolve(True)} & $\hat{\theta} = \argmax_{\theta}\mathcal{L}(\theta)$ \\
+\bottomrule
+\end{ClaudeTable}
+
+\ClaudeChapterPage{03}{Proceso estocástico subyacente}{$\sigma_t$ es $\F_{t-1}$-medible: la volatilidad de hoy depende solo de información pasada.}
+
+\begin{ClaudeCard}{Espacio de probabilidad filtrado}
+Sea $(\Omega,\F,\{\F_t\}_{t\geq 0},\Prob)$ un espacio de probabilidad filtrado. El modelo asume:
+\begin{align*}
+  r_t &= \mu + \varepsilon_t, \qquad \varepsilon_t = \sigma_t z_t, \\
+  z_t &\sim t_\nu(0,1) \quad \text{(i.i.d.)},
+\end{align*}
+con $\sigma_t$ medible respecto a la filtración pasada $\F_{t-1}$.
+
+El rendimiento logarítmico se define como $r_t = \ln(P_t/P_{t-1})$ donde $\{P_t\}$ es la serie de precios.
+\end{ClaudeCard}
+
+\section{Descomposición de la log-varianza}
+
+\begin{ClaudeTable}{@{}c c L l@{}}
+\ClaudeTableHeader Término & Celda & Rol matemático & Inicial \\
+\toprule
+$\mu$    & (2,8) & $\E[r_t\given\F_{t-1}]$                & $0$    \\
+$\omega$ & (3,8) & nivel base de log-volatilidad          & $-0{,}5$ \\
+$\alpha$ & (4,8) & reacción al módulo $\abs{z_{t-1}}$    & $0{,}1$ \\
+$\beta$  & (5,8) & persistencia / memoria                 & $0{,}8$ \\
+$\gamma$ & (6,8) & asimetría (leverage effect)            & $0$    \\
+$\nu$    & (7,8) & grados de libertad (colas)             & $8$    \\
+\bottomrule
+\end{ClaudeTable}
+
+\section{La esperanza $\E\abs{z}$}
+
+Para centrar el término $\alpha(\abs{z_{t-1}}-\E\abs{z})$:
+\[
+  \E\abs{z_t} = \begin{cases}
+    \displaystyle\sqrt{\tfrac{2}{\pi}} \approx 0{,}7979 & \text{si } z_t\sim\mathcal{N}(0,1), \\[0.6em]
+    \displaystyle\frac{2\sqrt{\nu-2}}{(\nu-1)\sqrt{\pi}}\cdot\frac{\Gamma(\nu/2)}{\Gamma((\nu-1)/2)} & \text{si } z_t\sim t_\nu.
+  \end{cases}
+\]
+
+\ClaudeChapterPage{04}{Elegancia topológica}{$h_t = \ln\sigma_t^2$ libera al espacio de búsqueda de las restricciones de positividad.}
+
+\begin{ClaudeTip}[Consecuencia topológica]
+La transformación $h_t = \ln(\sigma_t^2)$ implica $\sigma_t^2 = e^{h_t} > 0$ para todo $h_t\in\R$. Los parámetros $\omega,\alpha,\beta,\gamma$ pueden tomar cualquier valor en $\R$ sin violar la positividad de la varianza. \Highlight{El espacio de búsqueda es $\Theta=\R^6$ completo.}
+\end{ClaudeTip}
+
+\section{GARCH vs.\ EGARCH}
+
+\begin{ClaudeTable}{@{}lL L@{}}
+\ClaudeTableHeader Característica & GARCH(1,1) & EGARCH(1,1) \\
+\toprule
+Ecuación & $\sigma_t^2 = \omega + \alpha\varepsilon_{t-1}^2 + \beta\sigma_{t-1}^2$ & $\ln\sigma_t^2 = \omega + \alpha g(z_{t-1}) + \beta\ln\sigma_{t-1}^2$ \\
+Restricciones & $\omega>0$, $\alpha\geq 0$, $\beta\geq 0$ & ninguna (topológica) \\
+Asimetría & no captura & $\gamma\neq 0$ \\
+Espacio de parámetros & $\Theta\subset\R^3_{\geq 0}$ & $\Theta=\R^4$ \\
+\bottomrule
+\end{ClaudeTable}
+
+\ClaudeChapterPage{05}{Efecto leverage}{Las malas noticias incrementan más la volatilidad que las buenas.}
+
+\begin{ClaudeCard}{Interpretación del leverage}
+El término $\gamma z_{t-1}$ captura la asimetría:
+\[
+  \frac{\partial h_t}{\partial z_{t-1}} = \alpha\cdot\sign(z_{t-1}) + \gamma.
+\]
+
+\begin{itemize}[leftmargin=1.2em,nosep]
+\item $z_{t-1}>0$ (buena noticia): contribución $= \alpha + \gamma$.
+\item $z_{t-1}<0$ (mala noticia): contribución $= -\alpha + \gamma$.
+\end{itemize}
+
+\textbf{Leverage effect} ($\gamma<0$): las malas noticias incrementan más la volatilidad.
+\end{ClaudeCard}
+
+\begin{ClaudeDiagram}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=11cm, height=6cm,
+    xlabel={$z_{t-1}$ (shock estandarizado)},
+    ylabel={contribución a $h_t$},
+    xmin=-3, xmax=3, ymin=-0.4, ymax=0.8,
+    axis lines=middle, grid=major,
+    legend pos=north west,
+    legend style={font=\UIFont\small,fill=claudeIvory,draw=claudeBorder},
+    tick label style={font=\UIFont\footnotesize,/pgf/number format/use comma},
+    label style={font=\UIFont\small\color{claudeWarmText}},
+]
+  \addplot[domain=-3:0,samples=50,thick,claudeForest]    {0.2*(-x)};
+  \addplot[domain=0:3, samples=50,thick,claudeForest]    {0.2*x};
+  \addlegendentry{$\gamma=0$ (simétrico)}
+  \addplot[domain=-3:0,samples=50,thick,claudeTerracotta,dashed] {0.2*(-x) - 0.3*x};
+  \addplot[domain=0:3, samples=50,thick,claudeTerracotta,dashed] {0.2*x - 0.3*x};
+  \addlegendentry{$\gamma=-0{,}3$ (leverage)}
+\end{axis}
+\end{tikzpicture}
+\end{ClaudeDiagram}
+
+\ClaudeChapterPage{06}{Estabilidad y log-verosimilitud}{Estacionariedad: $\alpha+\beta<1$. Verosimilitud: $t$-Student con $\nu>2$.}
+
+\begin{ClaudeInfo}[Estacionariedad]
+La condición de \emph{covariance stationarity} para EGARCH requiere $\abs{\beta}<1$. La restricción $\alpha+\beta<1$ es \emph{suficiente} y garantiza:
+\begin{enumerate}[leftmargin=1.2em,nosep]
+\item existencia de varianza incondicional finita,
+\item ergodicidad del proceso $\{h_t\}$,
+\item convergencia del estimador MLE.
+\end{enumerate}
+\end{ClaudeInfo}
+
+La restricción $\nu>2$ garantiza
+\[
+  \Var(z_t) = \frac{\nu}{\nu-2} \quad\text{(solo definida si } \nu>2\text{)}.
+\]
+
+\begin{ClaudeCard}{Log-verosimilitud con $t$-Student}
+La densidad de $t_\nu$ estandarizada es
+\[
+  f_{t_\nu}(z) = \frac{\Gamma(\frac{\nu+1}{2})}{\sqrt{(\nu-2)\pi}\,\Gamma(\frac{\nu}{2})}
+                \left(1 + \frac{z^2}{\nu-2}\right)^{-\frac{\nu+1}{2}}.
+\]
+
+Con $z_t = (r_t-\mu)/\sigma_t$ y $\sigma_t = e^{h_t/2}$:
+\[
+  \boxed{\;\ell_t = \ln\Gamma\!\bigl(\tfrac{\nu+1}{2}\bigr) - \ln\Gamma\!\bigl(\tfrac{\nu}{2}\bigr) - \tfrac{1}{2}\ln[(\nu-2)\pi] - \tfrac{1}{2}h_t - \tfrac{\nu+1}{2}\ln\!\Bigl(1 + \tfrac{z_t^2}{\nu-2}\Bigr).\;}
+\]
+\end{ClaudeCard}
+
+\section{Optimización GRG nonlinear}
+
+\begin{ClaudeTip}[Problema de optimización]
+\[
+  \hat{\theta} = \argmax_{\theta\in\Theta}\mathcal{L}(\theta) \quad \text{sujeto a } g(\theta)\leq 0.
+\]
+\texttt{Engine:=2} selecciona \emph{Generalized Reduced Gradient}: optimización no convexa (múltiples máximos locales posibles), gradientes numéricos + búsqueda lineal, sensible a valores iniciales.
+\end{ClaudeTip}
+
+\section{Output y criterios de información}
+
+Para cada serie $i$:
+\[
+  \text{Resultado}_i = \bigl(\text{id}, \hat{\mu}, \hat{\omega}, \hat{\alpha}, \hat{\beta}, \hat{\gamma}, \hat{\nu}, \mathcal{L}(\hat{\theta})\bigr).
+\]
+
+\begin{align*}
+  \text{AIC} &= -2\,\mathcal{L}(\hat{\theta}) + 2k, \\
+  \text{BIC} &= -2\,\mathcal{L}(\hat{\theta}) + k\ln(T),
+\end{align*}
+donde $k=6$ y $T$ es el tamaño muestral.
+
+\ClaudeChapterPage{07}{Síntesis}{Biyección código $\leftrightarrow$ matemática.}
+
+\begin{ClaudeCheck}[La traducción exacta]
+\begin{itemize}[leftmargin=1.2em,nosep]
+\item \texttt{Columns(i+1).Copy} $\longleftrightarrow$ serie estocástica $\{r_t\}\in L^2(\Omega)$.
+\item \texttt{Cells(2,8):Cells(7,8)} $\longleftrightarrow$ vector $\theta\in\R^6$.
+\item \texttt{SolverOk(...,1,...)} $\longleftrightarrow$ $\max_\theta \mathcal{L}(\theta)$.
+\item \texttt{SolverOptions(...,False)} $\longleftrightarrow$ $\Theta=\R^6$ (elegancia topológica).
+\item \texttt{SolverAdd(...,3,...)} $\longleftrightarrow$ condiciones de existencia y estabilidad.
+\item \texttt{Cells(13,8)} $\longleftrightarrow$ $\mathcal{L}(\theta)=\sum_t \ell_t$ con $z_t\sim t_\nu$.
+\end{itemize}
+\end{ClaudeCheck}
+
+El modelo EGARCH(1,1)-$t$ es un ejemplo paradigmático de cómo la programación financiera traduce conceptos de probabilidad, análisis y optimización en algoritmos ejecutables.
+
+\ClaudeSignature{\DocAuthor}{\DocRole}
+
+\end{document}

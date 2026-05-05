@@ -1,0 +1,265 @@
+% =============================================================================
+%  Análisis Matemático: Redes Neuronales Continuas en Forma Cerrada (CfC)
+%  Portado al sistema visual claudeeditorial: tcolorbox LinkedIn-blue
+%  pasan a ClaudeCard/Info/Tip/Check; el diagrama de Venn se rehace en
+%  TikZ con la paleta editorial.
+%  Compilacion: xelatex aphorisms/cfc-redes-neuronales.tex
+% =============================================================================
+\documentclass{claudeeditorial}
+
+\renewcommand{\DocKicker}{Ingeniería de prompts · Curso 2024/2025}
+\renewcommand{\DocTitle}{Redes neuronales continuas en forma cerrada}
+\renewcommand{\DocSubtitle}{Análisis matemático de las CfC del MIT/IST Austria — solución cerrada de las ecuaciones LTC y $O(k)$}
+\renewcommand{\DocAuthor}{Patricio Hernández Ballester · @MevakeshEmetGPT}
+\renewcommand{\DocRole}{Ingeniero de prompts}
+\renewcommand{\DocDate}{13 de abril de 2025}
+\renewcommand{\DocRef}{CFC-001}
+\renewcommand{\DocFooter}{claudeeditorial · CfC}
+
+\renewcommand{\ProjectName}{Tiempo continuo eficiente}
+\renewcommand{\ProjectPhase}{LTC $\to$ CfC}
+\renewcommand{\ProjectStatus}{$\sim 100{.}000\times$ más rápido}
+
+\hypersetup{
+  pdftitle={Redes Neuronales Continuas en Forma Cerrada (CfC)},
+  pdfauthor={MevakeshEmetGPT},
+  pdfkeywords={redes neuronales, CfC, forma cerrada, ecuaciones diferenciales, tiempo continuo}
+}
+
+\ClaudeRunningHeader
+
+\begin{document}
+\BodyCopy
+\ClaudeCover
+
+\ClaudeChapterPage{00}{Resumen}{Solución cerrada de las ecuaciones LTC: $O(k)$ y hasta $10^5\times$ más rápido que Neural ODEs.}
+
+\begin{claudehero}
+\ClaudeLead{Las CfC del MIT/IST Austria resuelven las limitaciones de velocidad de los Neural ODEs aproximando la solución de las ecuaciones LTC \emph{en forma cerrada} —sin solucionadores numéricos. Logran complejidad $O(k)$ con mejoras de velocidad de hasta cinco órdenes de magnitud manteniendo o mejorando la precisión.}
+\end{claudehero}
+
+\begin{ClaudeCard}{Ecuación fundamental de las CfC}
+\[
+  x(t) \approx (x(0)-A)\,e^{-[w_\tau + f(I(t),\theta)]\,t}\,f(-I(t),\theta) + A.
+\]
+\end{ClaudeCard}
+
+\section{Indicadores}
+
+\begin{tcbraster}[raster columns=4,raster equal height=rows,raster column skip=8pt]
+\KPICard{Complejidad}{$O(k)$}{lineal en pasos}
+\KPICard{Speed-up}{$\leq 10^5$}{vs.\ Neural ODE}
+\KPICard{Memoria}{$\downarrow$}{durante entrenamiento}
+\KPICard{Precisión}{$\uparrow$}{vs.\ baseline LTC}
+\end{tcbraster}
+
+\ClaudeChapterPage{01}{De redes discretas a continuas}{Las Neural ODEs reformulan las redes como un sistema dinámico continuo.}
+
+\section{Discretas}
+
+Las redes neuronales tradicionales operan en pasos discretos:
+\[
+  \mathbf{h}_{t+1} = f(\mathbf{h}_t, \mathbf{x}_t; \theta),
+\]
+con $\mathbf{h}_t$ el estado oculto, $\mathbf{x}_t$ la entrada y $\theta$ los parámetros.
+
+\section{Continuas (Neural ODEs)}
+
+\[
+  \frac{d\mathbf{x}(t)}{dt} = F\bigl(\mathbf{x}(t), I(t), \theta\bigr),
+\]
+con $\mathbf{x}(t)$ el vector de estado, $I(t)$ la entrada y $F$ continua y no lineal.
+
+\begin{ClaudeWarning}[El problema de los solucionadores numéricos]
+La principal limitación de las Neural ODEs es la necesidad de \emph{resolver numéricamente} estas ecuaciones (Euler, Runge-Kutta, …):
+\begin{itemize}[leftmargin=1.2em,nosep]
+\item alto coste computacional: cada paso de entrenamiento resuelve una ODE,
+\item precisión vs.\ eficiencia: mayor precisión $\Rightarrow$ mayor coste,
+\item escalabilidad limitada para problemas grandes.
+\end{itemize}
+La complejidad temporal de estos solvers es $O(k\cdot p)$, donde $p$ es el orden del método.
+\end{ClaudeWarning}
+
+\ClaudeChapterPage{02}{Redes LTC}{Liquid Time-constant: la base sobre la que se construyen las CfC.}
+
+\section{Formulación matemática}
+
+\begin{ClaudeCard}{Dinámica de un nodo LTC}
+\[
+  \frac{dx(t)}{dt} = -\bigl(w_\tau + f(I(t),\theta)\bigr)\,x(t) + A\,f(I(t),\theta),
+\]
+con
+\begin{itemize}[leftmargin=1.2em,nosep]
+\item $x(t)$ — estado de la neurona postsináptica en $t$,
+\item $w_\tau > 0$ — tiempo característico,
+\item $f(I(t),\theta)$ — no lineal, positiva, creciente y acotada,
+\item $A$ — potencial de reversión sináptica (bias).
+\end{itemize}
+\end{ClaudeCard}
+
+\section{Solución exacta para entradas continuas}
+
+\[
+  x(t) = (x(0)-A)\,e^{-w_\tau t}\,e^{-\int_0^t f(I(s))\,\dif s} + A.
+\]
+
+\begin{ClaudeInfo}[El cuello de botella]
+La integral $\int_0^t f(I(s))\,\dif s$ no siempre tiene solución analítica sencilla, especialmente con $f(I(s))$ compleja o $I(s)$ que varía continuamente de manera arbitraria. \Highlight{De ahí la necesidad del solver numérico —y el coste asociado.}
+\end{ClaudeInfo}
+
+\ClaudeChapterPage{03}{Solución en forma cerrada (CfC)}{Aproximación de la integral problemática.}
+
+\section{Derivación de la aproximación}
+
+\begin{ClaudeCard}{Aproximación clave}
+\[
+  e^{-\int_0^t f(I(s))\,\dif s} \approx e^{-f(I(t))\,t}\cdot f(-I(t),\theta).
+\]
+
+Sustituyendo en la solución exacta se obtiene la \emph{forma cerrada}:
+\[
+  \boxed{\;x(t) \approx (x(0)-A)\,e^{-[w_\tau + f(I(t),\theta)]\,t}\,f(-I(t),\theta) + A.\;}
+\]
+\end{ClaudeCard}
+
+\section{Validez matemática}
+
+\begin{ClaudeCheck}[Bajo qué condiciones la aproximación es buena]
+\begin{itemize}[leftmargin=1.2em,nosep]
+\item Para entradas constantes por tramos, la aproximación es \emph{exacta} en cada segmento.
+\item Para variaciones suaves de $I(t)$, el error es $O(\Delta t^2)$.
+\item La aproximación preserva las propiedades de estabilidad del sistema original.
+\end{itemize}
+\Highlight{El error es despreciable para la mayoría de aplicaciones prácticas.}
+\end{ClaudeCheck}
+
+\ClaudeChapterPage{04}{Complejidad y eficiencia}{Las CfC alcanzan $O(k)$, equivalente a las RNN tradicionales.}
+
+\begin{ClaudeTable}{@{}lL L@{}}
+\ClaudeTableHeader Arquitectura & Complejidad temporal & Comentario \\
+\toprule
+CfC                 & $O(k)$         & lineal en pasos de tiempo \\
+RNN tradicional     & $O(k)$         & lineal en pasos de tiempo \\
+ODE-RNN             & $O(k\cdot p)$  & $p$ orden del solver numérico \\
+Transformer         & $O(n\cdot k)$  & $n$ longitud de secuencia \\
+\bottomrule
+\end{ClaudeTable}
+
+\bigskip
+
+\begin{ClaudeTip}[Mejoras de rendimiento empíricas]
+\begin{itemize}[leftmargin=1.2em,nosep]
+\item Entre \Highlight{$10$ y $10^{5}$} veces más rápidas que modelos basados en ODEs.
+\item Reducción significativa de memoria durante el entrenamiento.
+\item Gradientes más estables durante la retropropagación.
+\end{itemize}
+\end{ClaudeTip}
+
+\ClaudeChapterPage{05}{Tiempo explícito}{El tiempo aparece directamente en la ecuación: ideal para muestreo irregular.}
+
+\begin{ClaudeCard}{Formulación temporal explícita}
+\[
+  x(t) = \sigma\bigl(-f(x,I;\theta_f)\,t\bigr) \odot g(x,I;\theta_g)
+       + \bigl[1 - \sigma\bigl(-f(x,I;\theta_f)\,t\bigr)\bigr] \odot h(x,I;\theta_h),
+\]
+con $\sigma$ logística, $\odot$ producto de Hadamard y $f,g,h$ no lineales entrenables.
+\end{ClaudeCard}
+
+\begin{ClaudeInfo}[Interpretación]
+Es una interpolación ponderada por tiempo entre dos estados:
+\begin{itemize}[leftmargin=1.2em,nosep]
+\item $g(x,I;\theta_g)$ — estado inicial / corto plazo,
+\item $h(x,I;\theta_h)$ — estado de equilibrio / largo plazo,
+\item $f(x,I;\theta_f)$ — controla la velocidad de transición.
+\end{itemize}
+Cuando $t\to 0$, $x(t)\approx g$. Cuando $t\to\infty$, $x(t)\approx h$.
+\end{ClaudeInfo}
+
+\ClaudeChapterPage{06}{Espacio de soluciones}{Diagrama de Venn: las CfC ocupan un espacio único.}
+
+\begin{ClaudeDiagram}
+\centering
+\begin{tikzpicture}[scale=0.95,every node/.style={font=\UIFont\small\bfseries}]
+  \fill[claudeTerracotta!22] (0,0)    circle (2.1cm);
+  \fill[claudeForest!22]     (2.6,0)  circle (2.1cm);
+  \fill[claudeAmbar!22]      (1.3,-2.2) circle (2.1cm);
+  \draw[claudeTerracotta,thick] (0,0)    circle (2.1cm) node[above=2.2cm,text=claudeInk] {Neural ODEs};
+  \draw[claudeForest,thick]     (2.6,0)  circle (2.1cm) node[above=2.2cm,text=claudeInk] {CfCs};
+  \draw[claudeAmbar,thick]      (1.3,-2.2) circle (2.1cm) node[below=2.2cm,text=claudeInk] {RNNs};
+  \node[font=\UIFont\scriptsize,text=claudeWarmText] at (-1.3,0)  {tiempo continuo};
+  \node[font=\UIFont\scriptsize,text=claudeWarmText] at ( 3.9,0)  {eficiencia};
+  \node[font=\UIFont\scriptsize,text=claudeWarmText] at ( 1.3,-3.3) {discretas};
+  \node[font=\UIFont\scriptsize,text=claudeInk]  at (1.3, 0.4) {tiempo continuo};
+  \node[font=\UIFont\scriptsize,text=claudeInk]  at (1.3,-0.1) {eficiente};
+  \node[font=\UIFont\scriptsize,text=claudeWarmText] at (0.2,-1.5) {invertibilidad};
+  \node[font=\UIFont\scriptsize,text=claudeWarmText] at (2.4,-1.5) {simplicidad};
+\end{tikzpicture}
+\end{ClaudeDiagram}
+
+\bigskip
+
+Las CfC combinan las ventajas de las Neural ODEs (operación en tiempo continuo) con la eficiencia computacional de las RNN tradicionales, ocupando un espacio único en el panorama de arquitecturas neuronales.
+
+\ClaudeChapterPage{07}{Limitaciones e implicaciones}{Lo que las CfC no resuelven.}
+
+\section{Gradientes desvanecientes}
+
+\begin{ClaudeWarning}[Decaimiento exponencial]
+El término exponencial $e^{-[w_\tau + f(I(t),\theta)]\,t}$ puede generar gradientes desvanecientes para secuencias largas:
+\[
+  \norm*{\frac{\partial x(t)}{\partial \theta}} \propto e^{-\alpha t},
+\]
+con $\alpha>0$ relacionada con $w_\tau$ y $f(I(t),\theta)$.
+\end{ClaudeWarning}
+
+\section{Invertibilidad no garantizada}
+
+A diferencia de las Neural ODEs puras, las CfC \emph{no} garantizan la invertibilidad del sistema. Si $\Phi: x(t_1)\mapsto x(t_2)$ es el operador de evolución, no podemos garantizar que exista $\Phi^{-1}$ tal que $\Phi^{-1}(\Phi(x))=x$ para todo $x$. Esta limitación restringe aplicaciones donde la reversibilidad temporal es crítica (ciertos modelos generativos, sistemas físicos conservativos).
+
+\ClaudeChapterPage{08}{Cuándo elegir CfC}{Criterios matemáticos de selección.}
+
+\begin{ClaudeCard}{Dominios óptimos}
+\begin{multicols}{2}
+\begin{itemize}[leftmargin=1.2em,nosep]
+\item series temporales médicas
+\item datos financieros irregulares
+\item sensores robóticos
+\item conducción autónoma
+\item análisis de sentimientos
+\item modelado físico
+\item sistemas de control
+\item análisis biomédico
+\item predicción climática
+\item procesamiento de señales
+\end{itemize}
+\end{multicols}
+\end{ClaudeCard}
+
+\begin{ClaudeCheck}[Criterios de selección]
+Las CfC son preferibles cuando:
+\begin{itemize}[leftmargin=1.2em,nosep]
+\item los datos presentan muestreo irregular ($t_{i+1}-t_i$ no constante);
+\item la eficiencia computacional es crítica ($\text{tiempo}_{\text{CfC}} \ll \text{tiempo}_{\text{ODE}}$);
+\item las dependencias temporales no son extremadamente largas ($\text{lag} < O(100)$);
+\item la interpretabilidad es importante.
+\end{itemize}
+Para modelado de lenguaje con dependencias muy largas, los \emph{Transformers} siguen siendo más adecuados.
+\end{ClaudeCheck}
+
+\section*{Conclusión}
+
+Las CfC representan un avance significativo: solución matemáticamente elegante para modelar procesos continuos eficientemente. Eliminan los solucionadores numéricos costosos, reducen la complejidad a $O(k)$, ofrecen mejoras de velocidad de hasta cinco órdenes de magnitud, mantienen o mejoran la precisión y modelan explícitamente el tiempo —ampliando el horizonte del aprendizaje profundo desde la medicina hasta la robótica.
+
+\section*{Referencias}
+
+\begin{enumerate}[label={[\arabic*]},leftmargin=2.2em]
+\item Hasani, R., Lechner, M., Amini, A., Rus, D., \& Grosu, R. \emph{Liquid Time-constant Networks}. AAAI, 2021.
+\item Chen, T.\,Q., Rubanova, Y., Bettencourt, J., \& Duvenaud, D.\,K. \emph{Neural Ordinary Differential Equations}. NeurIPS, 2018.
+\item Dupont, E., Doucet, A., \& Teh, Y.\,W. \emph{Augmented Neural ODEs}. NeurIPS, 2019.
+\item Lechner, M., \& Hasani, R. \emph{Learning Long-Term Dependencies in Irregularly-Sampled Time Series}. NeurIPS, 2020.
+\item Vaswani, A.\ et al. \emph{Attention Is All You Need}. NeurIPS, 2017.
+\end{enumerate}
+
+\ClaudeSignature{\DocAuthor}{\DocRole}
+
+\end{document}

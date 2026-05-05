@@ -1,0 +1,134 @@
+% =============================================================================
+%  UNED · Análisis Matemático II — superficie cilíndrica del restaurante
+%  Ejercicio resuelto portado al sistema visual claudeeditorial.
+%  Compilacion: xelatex aphorisms/uned-superficie-cilindrica.tex
+% =============================================================================
+\documentclass{claudeeditorial}
+
+\renewcommand{\DocKicker}{UNED · Análisis Matemático II}
+\renewcommand{\DocTitle}{Superficie cilíndrica del restaurante de la ladera}
+\renewcommand{\DocSubtitle}{Cálculo del área de una pared vertical de cristal definida por $x^2+(y-R)^2=R^2$ con $0\le z\le 4R^2-2Ry$}
+\renewcommand{\DocAuthor}{Patricio Hernández Ballester}
+\renewcommand{\DocRole}{Profesor de apoyo · Preparador de Oposiciones}
+\renewcommand{\DocDate}{24 de enero de 2025}
+\renewcommand{\DocRef}{UNED-001}
+\renewcommand{\DocFooter}{claudeeditorial · ejercicio resuelto}
+
+\renewcommand{\ProjectName}{Acceso $\geq 25$ · UNED}
+\renewcommand{\ProjectPhase}{Curso 2024/2025}
+\renewcommand{\ProjectStatus}{Resuelto}
+
+\hypersetup{
+  pdftitle={UNED - Superficie cilindrica de la ladera},
+  pdfauthor={Patricio Hernandez Ballester},
+  pdfkeywords={matemáticas, superficies, cálculo de áreas, integrales, UNED}
+}
+
+\ClaudeRunningHeader
+
+\begin{document}
+\BodyCopy
+\ClaudeCover
+
+\ClaudeChapterPage{01}{Enunciado}{Construcción de un restaurante sobre la ladera de una montaña: superficie cilíndrica de cristal con altura variable según el plano del arquitecto.}
+
+\section{Problema}
+
+Se proyecta la construcción de un restaurante sobre la ladera de una montaña. Parte de la pared vertical está formada por la superficie cilíndrica
+\[
+  x^2 + (y - R)^2 = R^2,
+\]
+y la altura (en la variable $z$) se extiende, según el plano del arquitecto, desde $z=0$ hasta
+\[
+  z = 4R^2 - 2\,R\,y.
+\]
+
+Se pide determinar el \Highlight{área de la pared vertical} que se construirá con cristal, correspondiente precisamente a esa superficie (cilindro) entre $z=0$ y $z = 4R^2 - 2Ry$.
+
+\begin{ClaudeInfo}[Objetivo]
+Calcular la superficie lateral
+\[
+  S=\bigl\{(x,y,z)\in\R^3 : x^2+(y-R)^2=R^2,\; 0\le z\le 4R^2 -2Ry\bigr\}.
+\]
+\end{ClaudeInfo}
+
+\section{Parametrización de la superficie}
+
+Para describir el cilindro $x^2 + (y-R)^2 = R^2$ usamos coordenadas cilíndricas desplazadas en $y$:
+\[
+  \begin{cases}
+    x(\theta,z) = R\cos\theta,\\
+    y(\theta,z) = R + R\sin\theta,\\
+    z(\theta,z) = z,
+  \end{cases}
+\]
+con $\theta\in[0,2\pi]$. Como $y = R\,(1 + \sin\theta)$, el límite superior para $z$ es
+\[
+  z_{\max} = 4R^2 - 2R\bigl(R + R\sin\theta\bigr)
+          = 2R^2\bigl(1 - \sin\theta\bigr).
+\]
+Por tanto, $z \in [\,0,\,2R^2(1 - \sin\theta)\,]$.
+
+\section{Cálculo del elemento de área}
+
+El vector de parametrización es
+\[
+  \vec{r}(\theta,z) = \bigl( R\cos\theta,\; R + R\sin\theta,\; z \bigr).
+\]
+Sus tangentes:
+\[
+  \frac{\partial \vec{r}}{\partial \theta}
+  = (-R\sin\theta,\; R\cos\theta,\; 0),
+  \qquad
+  \frac{\partial \vec{r}}{\partial z}
+  = (0,\;0,\;1).
+\]
+El producto vectorial:
+\[
+  \frac{\partial \vec{r}}{\partial \theta} \times \frac{\partial \vec{r}}{\partial z}
+  = \bigl(R\cos\theta,\; R\sin\theta,\; 0\bigr),
+\]
+con norma
+\[
+  \norm*{\frac{\partial \vec{r}}{\partial \theta} \times \frac{\partial \vec{r}}{\partial z}}
+  = \sqrt{R^2\cos^2\theta + R^2\sin^2\theta} = R.
+\]
+
+\begin{ClaudeTip}[Elemento de área]
+\[
+  \mathrm{d}S = R\,\mathrm{d}\theta\,\mathrm{d}z.
+\]
+\end{ClaudeTip}
+
+\section{Integral de la superficie}
+
+\[
+  \iint_S 1\,\mathrm{d}S
+  = \int_0^{2\pi}\!\!\int_0^{2R^2(1-\sin\theta)} R\,\mathrm{d}z\,\mathrm{d}\theta.
+\]
+
+\subsection{Evaluación}
+
+\begin{align*}
+  \int_0^{2\pi} R\,\bigl(2R^2(1-\sin\theta)\bigr)\,\mathrm{d}\theta
+  &= 2R^3 \int_0^{2\pi}(1-\sin\theta)\,\mathrm{d}\theta \\
+  &= 2R^3 \Bigl[\theta\bigr|_0^{2\pi} - (-\cos\theta)\bigr|_0^{2\pi}\Bigr] \\
+  &= 2R^3 \bigl[2\pi - 0\bigr] = 4\pi R^3.
+\end{align*}
+
+(Se ha usado $\cos(2\pi)=\cos(0)=1$, de donde la diferencia se anula.)
+
+\section{Conclusión}
+
+\begin{ClaudeCheck}[Resultado]
+El área de la superficie cilíndrica (la pared vertical de cristal) es
+\[
+  \boxed{\,4\pi R^3\,}.
+\]
+\end{ClaudeCheck}
+
+Por tanto, la pared curvada vertical del restaurante tiene un área de $4\pi R^3$, expresable directamente en función del radio $R$ del cilindro generatriz.
+
+\ClaudeSignature{\DocAuthor}{\DocRole}
+
+\end{document}
