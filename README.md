@@ -12,6 +12,7 @@ Este repositorio es una plantilla pública limpia. No publica planificación per
 - `main.tex`: documento maestro para trabajo diario de ingeniería.
 - `template.tex`: punto de partida mínimo.
 - `standalone-template.tex`: versión autocontenida basada en `article`.
+- `examples/lorem-all-cases.tex`: ejemplo integral ficticio que toca casi todos los casos de uso.
 - `examples/project-daybook.tex`: diario de ingeniería de proyectos.
 - `examples/technical-showcase.tex`: código, SQL, tablas, UML/ER y consola.
 - `examples/showcase.tex`: catálogo visual de componentes.
@@ -40,6 +41,7 @@ Ejemplos:
 ```powershell
 .\scripts\build.ps1 examples\project-daybook.tex
 .\scripts\build.ps1 examples\technical-showcase.tex
+.\scripts\build.ps1 examples\lorem-all-cases.tex
 ```
 
 ## Requisitos
@@ -94,7 +96,7 @@ Ejemplos:
 - `docs/ARCHITECTURE.md`: estructura del repositorio y responsabilidades.
 - `docs/COMPONENTS.md`: inventario de macros y entornos.
 - `docs/BEST_PRACTICES.md`: reglas de LaTeX y criterio editorial.
-- `docs/PROJECT_ENGINEERING.md`: flujo de uso como manual de marcha diario.
+- `docs/PROJECT_ENGINEERING.md`: flujo de uso para documento diario de ingeniería.
 - `docs/REFERENCE_MAP.md`: cómo se tradujeron los recursos LaTeX de inspiración.
 - `docs/DESIGN_NOTES.md`: traducción del estilo visual a PDF.
 

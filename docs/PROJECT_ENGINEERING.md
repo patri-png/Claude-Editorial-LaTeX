@@ -1,6 +1,6 @@
 # Documento diario de ingeniería de proyectos
 
-`main.tex` está pensado como manual de marcha: una pieza diaria para coordinar estado, decisiones y evidencia sin convertir el documento en una presentación.
+`main.tex` está pensado como manual de marca y uso: una pieza diaria para coordinar estado, decisiones y evidencia sin convertir el documento en una presentación.
 
 ## Estructura recomendada
 
@@ -34,4 +34,3 @@ Cada bloque debe responder a una pregunta clara:
 - ¿Qué riesgo hay que controlar?
 - ¿Qué evidencia permite verificarlo?
 - ¿Quién hace qué y cuándo?
-

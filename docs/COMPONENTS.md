@@ -101,4 +101,4 @@ Lenguajes preparados: `SQL`, `JavaScript`, `TypeScript`, `JSON`, `CSS`, `HTML`, 
 | `\ClaudeEROneToMany`, `\ClaudeERManyToOne`, `\ClaudeERManyToMany` | Cardinalidades ER con pata de cuervo. |
 | `\ClaudeKey`, `\ClaudeWeakKey` | Claves ER subrayadas o discontinuas. |
 
-Consulta `examples/showcase.tex` para ver una página de cada familia de componentes.
+Consulta `examples/showcase.tex` para ver una página de cada familia de componentes y `examples/lorem-all-cases.tex` para una prueba integral tipo lorem ipsum con código, tablas, notas, UML y ER.

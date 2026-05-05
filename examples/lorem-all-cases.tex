@@ -1,0 +1,440 @@
+\documentclass{claudeeditorial}
+
+\renewcommand{\DocKicker}{Lorem system test}
+\renewcommand{\DocTitle}{Manual editorial lorem ipsum}
+\renewcommand{\DocSubtitle}{Ejemplo integral ficticio para probar portada, cajas, tablas, código, diagramas, decisiones, notas marginales y estilos técnicos}
+\renewcommand{\DocAuthor}{Equipo de documentación}
+\renewcommand{\DocRole}{Plantilla pública}
+\renewcommand{\DocDate}{5 de mayo de 2026}
+\renewcommand{\DocRef}{LOREM-ALL-001}
+\renewcommand{\DocFooter}{claudeeditorial lorem all cases}
+
+\renewcommand{\ProjectName}{Proyecto Lorem}
+\renewcommand{\ProjectPhase}{Exploración editorial}
+\renewcommand{\ProjectOwner}{Equipo ficticio}
+\renewcommand{\ProjectStatus}{Simulación}
+
+\renewcommand{\InterviewQuestionLabel}{Pregunta}
+\renewcommand{\InterviewAnswerLabel}{Respuesta}
+
+\hypersetup{
+  pdftitle={Manual editorial lorem ipsum},
+  pdfauthor={Equipo de documentación},
+  pdfsubject={Ejemplo integral ficticio para Claude Editorial LaTeX},
+  pdfkeywords={latex, editorial, uml, er, sql, lorem ipsum}
+}
+
+\ClaudeRunningHeader
+\setstretch{1.22}
+
+\newcommand{\LoremA}{Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer non sem vel justo posuere pretium. Donec dictum, arcu at cursus gravida, massa augue luctus erat, vitae pulvinar neque neque sed magna.}
+\newcommand{\LoremB}{Curabitur vitae sapien non nunc tempor dignissim. Aenean facilisis, nisi at fermentum iaculis, libero neque cursus erat, sed varius mi velit sed nulla.}
+\newcommand{\LoremC}{Suspendisse potenti. Praesent euismod, lorem sed viverra convallis, lacus magna dictum est, at vulputate ipsum lectus vitae urna.}
+
+\begin{document}
+\BodyCopy
+\CornerRibbon[claudeTerracotta]{Lorem}
+
+\ClaudeCover
+
+\tableofcontents
+\clearpage
+
+\ClaudeChapterPage{00}{Mapa integral}{Documento ficticio para probar casi todo el sistema visual sin exponer información real.}
+
+\ClaudeProjectHeader
+  {\ProjectName}
+  {Manual de marca y uso ficticio: lorem ipsum aplicado a decisiones, arquitectura, evidencias y documentación técnica.}
+  {\DocDate}
+  {\ProjectStatus}
+
+\begin{claudehero}
+\ClaudeLead{Este documento es un laboratorio editorial. Todo el contenido es ficticio, pero cada bloque representa un caso de uso real: informe diario, apuntes técnicos, código, tabla, salida reproducible, diagrama UML, diagrama ER y notas laterales.}
+\end{claudehero}
+
+\ClaudeBanner[pulseDecision]{Showcase integral de componentes}
+
+\begin{tcbraster}[raster columns=4,raster equal height=rows,raster column skip=8pt]
+\KPICard{Uso}{Integral}{casi todas las piezas}
+\KPICard{Contenido}{Lorem}{sin datos reales}
+\KPICard{Diagramas}{UML/ER}{TikZ nativo}
+\KPICard{Código}{Multi}{SQL, Java, C, C\#, TS}
+\end{tcbraster}
+
+\section{Lectura ejecutiva}
+
+\sideNumber{01}{Primer bloque del documento: resumen, señales y foco.}
+\sideNote{\textbf{Nota marginal.} Esta nota usa el margen y debe ser breve.}
+
+\LoremA\ \Highlight{Este realce indica una idea que merece atención}. \LoremB
+
+\begin{tcbraster}[raster columns=3,raster equal height=rows,raster column skip=8pt]
+\BigStat[\DeltaUp{+12\,\%}]{Cadencia}{Alta}{ritmo de revisión simulado}
+\BigStat[\DeltaFlat{0}]{Bloqueos}{Ninguno}{sin dependencias reales}
+\BigStat[\DeltaDown{-2}]{Riesgo}{Bajo}{solo datos ficticios}
+\end{tcbraster}
+
+\begin{PressQuote}[Principio lorem]
+La plantilla debe poder mostrar complejidad sin parecer complicada. La página tiene que respirar incluso cuando contiene decisiones, tablas y código.
+\end{PressQuote}
+
+\begin{Comparison}{Borrador}{Sistema editorial}
+\CompCol{Borrador}{
+\IconCross\ Sin jerarquía clara.\par
+\IconCross\ Código sin contexto.\par
+\IconCross\ Tablas densas sin lectura transversal.\par
+\IconCross\ Diagramas separados del relato.}
+\CompCol{Sistema editorial}{
+\IconCheck\ Metadatos visibles.\par
+\IconCheck\ Componentes semánticos.\par
+\IconCheck\ Evidencia reproducible.\par
+\IconCheck\ Diagramas integrados en el flujo.}
+\end{Comparison}
+
+\section{Cajas semánticas}
+
+\begin{tcbraster}[raster columns=2,raster equal height=rows,raster column skip=10pt]
+\begin{ClaudeInfo}[Contexto]
+\LoremA
+\end{ClaudeInfo}
+
+\begin{ClaudeTip}[Consejo]
+\LoremB
+\end{ClaudeTip}
+
+\begin{ClaudeWarning}[Atención]
+\LoremC
+\end{ClaudeWarning}
+
+\begin{ClaudeCritical}[Crítico]
+Este bloque simula una condición de riesgo alto, pero no contiene ningún dato real.
+\end{ClaudeCritical}
+
+\begin{ClaudeCheck}[Validación]
+El bloque confirma una hipótesis ficticia y deja constancia de una revisión visual.
+\end{ClaudeCheck}
+
+\begin{ClaudeQuestion}[Pregunta]
+¿El lector puede entender qué decisión, evidencia y siguiente paso aparecen en la página?
+\end{ClaudeQuestion}
+\end{tcbraster}
+
+\begin{claudecallout}{Callout heredado}
+\LoremA
+\end{claudecallout}
+
+\begin{claudewarning}{Advertencia heredada}
+\LoremB
+\end{claudewarning}
+
+\begin{claudeaside}{Aside editorial}
+\LoremC
+\end{claudeaside}
+
+\section{Cards, glosario y etiquetas}
+
+\begin{tcbraster}[raster columns=3,raster equal height=rows,raster column skip=8pt]
+\begin{ClaudeCard}{Card de criterio}
+\LoremA
+\ClaudeCardFooter{Footer: criterio ficticio revisado.}
+\end{ClaudeCard}
+
+\begin{ClaudeCard}{Card de evidencia}
+\LoremB
+\ClaudeCardFooter{Footer: salida esperada simulada.}
+\end{ClaudeCard}
+
+\begin{ClaudeCard}{Card de decisión}
+\LoremC
+\ClaudeCardFooter{Footer: pendiente de firma ficticia.}
+\end{ClaudeCard}
+\end{tcbraster}
+
+\DefnEntry{Lorem operativo}{Texto ficticio usado para probar estructura sin contenido sensible.}
+\DefnEntry{Manual de uso}{Documento diario que concentra estado, decisión, riesgo y evidencia.}
+\DefnEntry{Evidencia reproducible}{Fragmento verificable, salida de consola o consulta que sostiene una afirmación.}
+
+\Tag{Lorem}\quad
+\Tag[pulseIdentidad]{Contexto}\quad
+\Tag[pulseDecision]{Decisión}\quad
+\Tag[pulseConformal]{Validación}\quad
+\Tag[claudeForest]{Arquitectura}
+
+\section{Decisiones y acciones}
+
+\ClaudeDecisionRecord[Simulada]
+  {ADR-LOR-001 · Contrato de ejemplo}
+  {Lorem ipsum describe una tensión ficticia entre rapidez de entrega y claridad de mantenimiento.}
+  {Se decide usar un contrato canónico de ejemplo, con nombres estables y salidas documentadas.}
+  {La complejidad se desplaza a los adaptadores y el documento gana trazabilidad.}
+
+\begin{ClaudeActionList}[Acciones lorem]
+\ClaudeActionItem{Dueño A}{hoy}{Revisar la tabla de riesgos ficticia y cerrar etiquetas visuales.}
+\ClaudeActionItem{Dueño B}{mañana}{Preparar una salida de consola de ejemplo y validar saltos de línea.}
+\ClaudeActionItem{Dueño C}{esta semana}{Separar un ADR completo si el bloque de decisión crece demasiado.}
+\end{ClaudeActionList}
+
+\begin{ClaudeTable}{@{}lL L l@{}}
+\ClaudeTableHeader Riesgo & Impacto & Mitigación & Estado \\
+\toprule
+\ClaudeRiskRow{LOR-01}{Lorem ipsum puede ocupar más espacio que el contenido real.}{Revisar saltos de página y cajas largas.}{\StatusWIP}
+\ClaudeRiskRow{LOR-02}{Un diagrama demasiado grande rompe la cadencia.}{Dividir en dos diagramas o usar `whole`.}{\StatusOpen}
+\ClaudeRiskRow{LOR-03}{El acento terracota puede saturar la página.}{Usarlo solo para navegación y decisión.}{\StatusDone}
+\bottomrule
+\end{ClaudeTable}
+
+\section{Tabla plana y material didáctico}
+
+\begin{ClaudeTable}{@{}lLr@{}}
+\ClaudeTableHeader Componente & Caso de uso & Prioridad \\
+\toprule
+Portada & Abrir documento con identidad y metadatos. & 1 \\
+Info box & Separar contexto sin romper lectura. & 2 \\
+ClaudeCode & Documentar consulta, comando o implementación. & 1 \\
+ClaudeDiagram & Explicar estructura cuando el texto se queda corto. & 1 \\
+Notas marginales & Añadir comentario breve y no bloqueante. & 3 \\
+\bottomrule
+\end{ClaudeTable}
+
+\begin{ClaudeExercise}{Ejercicio lorem}
+Muestra una consulta que liste registros ficticios, filtre por estado y ordene por fecha descendente.
+\end{ClaudeExercise}
+
+\begin{ClaudeSolution}
+La solución usa `WHERE`, `ORDER BY` y alias para generar una salida legible.
+\end{ClaudeSolution}
+
+\section{Código y salidas reproducibles}
+
+\begin{ClaudeCode}[title={Consulta SQL lorem}]{SQL}
+SELECT
+  item_id,
+  status,
+  COUNT(*) AS total
+FROM lorem_events
+WHERE status IN ('open', 'ready', 'done')
+GROUP BY item_id, status
+ORDER BY total DESC;
+\end{ClaudeCode}
+
+\begin{ClaudeOutput}
+Output ficticio:
+
+ready  42
+open   13
+done    8
+\end{ClaudeOutput}
+
+\begin{ClaudeCode}[title={Servicio TypeScript}]{TypeScript}
+type LoremEvent = {
+  id: string;
+  status: 'open' | 'ready' | 'done';
+};
+
+export function readyEvents(events: LoremEvent[]) {
+  return events.filter((event) => event.status === 'ready');
+}
+\end{ClaudeCode}
+
+\begin{ClaudeCode}[title={Clase Java ficticia}]{Java}
+interface Identificable {
+    String id();
+}
+
+class DocumentoLorem implements Identificable {
+    private final String id;
+
+    DocumentoLorem(String id) {
+        this.id = id;
+    }
+
+    public String id() {
+        return id;
+    }
+}
+\end{ClaudeCode}
+
+\begin{ClaudeCode}[title={Modelo C}]{C}
+#include <stdio.h>
+
+typedef struct {
+    const char* id;
+    int prioridad;
+} TareaLorem;
+
+int main(void) {
+    TareaLorem tarea = {"LOR-001", 1};
+    printf("%s:%d\n", tarea.id, tarea.prioridad);
+    return 0;
+}
+\end{ClaudeCode}
+
+\begin{ClaudeCode}[title={Modelo C++}]{Cpp}
+#include <string>
+#include <vector>
+
+class RegistroLorem {
+public:
+    explicit RegistroLorem(std::string id) : id_(id) {}
+    std::string id() const { return id_; }
+private:
+    std::string id_;
+};
+\end{ClaudeCode}
+
+\begin{ClaudeCode}[title={Modelo C\#}]{CSharp}
+public abstract class VolumenLorem
+{
+    public string Nombre { get; set; }
+    public abstract void Mostrar();
+}
+\end{ClaudeCode}
+
+\begin{ClaudeCode}[title={Macro VBA ficticia}]{VBA}
+Option Explicit
+
+Sub RevisarLorem()
+    Dim estado As String
+    estado = "ready"
+    MsgBox estado
+End Sub
+\end{ClaudeCode}
+
+\begin{ClaudeConsole}
+$ latexmk examples/lorem-all-cases.tex
+Latexmk: applying rule 'xelatex'
+Output written on lorem-all-cases.pdf
+\end{ClaudeConsole}
+
+\section{Compatibilidad Pandoc}
+
+\begin{Shaded}
+\begin{Highlighting}
+\KeywordTok{SELECT}\NormalTok{ item_id, status}
+\KeywordTok{FROM}\NormalTok{ lorem_events}
+\KeywordTok{WHERE}\NormalTok{ status }\OperatorTok{=}\StringTok{ 'ready'}\NormalTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+El texto puede incluir código inline como \CodeInline{SELECT * FROM lorem_events} o términos SQL como \SQLTerm{ORDER BY}.
+
+\clearpage
+\ClaudeChapterPage{01}{Diagramas}{UML, ER, flujo y relaciones con cardinalidad}
+
+\section{Diagrama UML}
+
+\begin{ClaudeDiagram}
+\centering
+\begin{tikzpicture}[claude diagram canvas,node distance=20mm]
+  \ClaudeUMLInterface{Repository}
+    {}
+    {+ find(id) : Entity\\+ save(entity) : void}
+  \ClaudeUMLClass[right=of Repository]{Service}
+    {- repository : Repository\\- policy : Policy}
+    {+ execute(command) : Result\\- validate(command) : bool}
+  \ClaudeUMLClass[right=of Service]{Controller}
+    {- service : Service}
+    {+ handle(request) : Response}
+  \ClaudeUMLClass[below=of Service]{DecisionLog}
+    {- entries : List}
+    {+ append(result) : void\\+ latest() : Entry}
+  \ClaudeUMLRelation[claude uml dependency]{Service}{Repository}[uses]
+  \ClaudeUMLRelation[claude uml relation]{Controller}{Service}[calls]
+  \ClaudeUMLRelation[claude uml dependency]{Service}{DecisionLog}[writes]
+\end{tikzpicture}
+\end{ClaudeDiagram}
+
+\section{Diagrama ER}
+
+\begin{ClaudeDiagram}
+\centering
+\begin{tikzpicture}[claude diagram canvas,node distance=18mm]
+  \ClaudeEREntity{project}{Project}
+  \ClaudeERAttribute[above left=of project]{project_id}{\ClaudeKey{id}}
+  \ClaudeERAttribute[below left=of project]{project_name}{name}
+
+  \ClaudeERRelationship[right=of project]{contains}{contains}
+  \ClaudeEREntity[right=of contains]{workpackage}{WorkPackage}
+  \ClaudeERAttribute[above=of workpackage]{wp_id}{\ClaudeKey{id}}
+  \ClaudeERAttribute[below=of workpackage]{wp_status}{status}
+
+  \ClaudeERRelationship[right=of workpackage]{produces}{produces}
+  \ClaudeERWeakEntity[right=of produces]{evidence}{Evidence}
+  \ClaudeERAttribute[above=of evidence]{evidence_id}{\ClaudeWeakKey{id}}
+  \ClaudeERAttribute[below=of evidence]{evidence_type}{type}
+
+  \ClaudeEROneToMany{project}{contains}[1..N]
+  \ClaudeERManyToOne{contains}{workpackage}[N..1]
+  \ClaudeEROneToMany{workpackage}{produces}[1..N]
+  \ClaudeERManyToOne{produces}{evidence}[N..1]
+
+  \ClaudeERLink{project_id}{project}
+  \ClaudeERLink{project_name}{project}
+  \ClaudeERLink{wp_id}{workpackage}
+  \ClaudeERLink{wp_status}{workpackage}
+  \ClaudeERLink{evidence_id}{evidence}
+  \ClaudeERLink{evidence_type}{evidence}
+\end{tikzpicture}
+\end{ClaudeDiagram}
+
+\section{Flujo simple}
+
+\begin{ClaudeDiagram}
+\centering
+\begin{tikzpicture}[claude diagram canvas,node distance=18mm]
+  \node[claude diagram node] (input) {Entrada\\lorem};
+  \node[claude diagram node,right=of input] (review) {Revisión};
+  \node[claude diagram node,right=of review] (decision) {Decisión};
+  \node[claude diagram node,right=of decision] (evidence) {Evidencia};
+  \draw[claude uml relation] (input) -- (review);
+  \draw[claude uml relation] (review) -- (decision);
+  \draw[claude uml relation] (decision) -- (evidence);
+\end{tikzpicture}
+\end{ClaudeDiagram}
+
+\section{Notas laterales y citas}
+
+\ClaudeMarginInfo[Info]{El margen se usa para contexto corto.}
+\ClaudeMarginWarn[Warn]{No fuerces notas largas en margen.}
+\ClaudeMarginTip[Tip]{Una frase suele bastar.}
+\ClaudeMarginCheck[Check]{Validación ficticia completada.}
+\ClaudeMarginQuestion[Q]{¿La página respira?}
+\ClaudeMarginCritical[Stop]{Riesgo simulado.}
+
+\sideQuote[Lorem designer]{Menos ruido, más dirección.}
+
+\LoremA\ \LoremB\ \LoremC
+
+\ClaudeTimelineItem{día 01}{Entrada lorem}{Se define el alcance visual del ejemplo integral.}
+\ClaudeTimelineItem{día 02}{Evidencia lorem}{Se añaden SQL, consola, código y salida reproducible.}
+\ClaudeTimelineItem{día 03}{Arquitectura lorem}{Se incorporan UML y ER con cardinalidad.}
+
+\section{Invariantes}
+
+\ClaudeInvariant{A}{Acento disciplinado}{El terracota aparece en navegación, decisión y énfasis; no rellena cada bloque.}
+\ClaudeInvariant{B}{Contenido verificable}{Cada claim importante se puede acompañar de tabla, código, salida o nota.}
+\ClaudeInvariant{C}{Plantilla pública}{El ejemplo no contiene nombres reales, rutas locales ni datos operativos privados.}
+
+\section{Entrevista lorem}
+
+\EntrevistaQ{¿Por qué el ejemplo usa contenido ficticio en vez de una historia real?}
+\EntrevistaA{Porque un repositorio público debe enseñar capacidades sin filtrar información sensible. El lorem ipsum permite probar estructura, ritmo y componentes.}
+
+\EntrevistaQ{¿Qué debe mirar primero quien evalúa la plantilla?}
+\EntrevistaA{La portada, la tabla de riesgos, los listados de código y los diagramas. Si esas piezas funcionan, el sistema aguanta documentos reales.}
+
+\section{Cierre}
+
+\begin{claudedarkpanel}{Cierre editorial}
+{\DisplayFont\fontsize{22}{26}\selectfont\color{claudeIvory}Lorem ipsum, pero con intención de producción.\par}
+\vspace{0.5em}
+{\color{claudeWarmSilver}Este archivo está pensado como prueba de cobertura: si compila y se ve equilibrado, la clase está lista para informes técnicos largos.}
+\end{claudedarkpanel}
+
+\begin{claudedecision}{Resultado esperado}
+El ejemplo debe servir como catálogo vivo, test manual de regresión visual y punto de inspiración para nuevos documentos.
+\end{claudedecision}
+
+\ClaudeSignature{\DocAuthor}{\DocRole}
+
+\end{document}
