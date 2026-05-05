@@ -13,7 +13,19 @@
 % ── Paquetes base ────────────────────────────────────────────────────────────
 \RequirePackage[a4paper,margin=26mm,top=23mm,bottom=23mm,headheight=14pt,headsep=8mm,footskip=12mm,marginparwidth=23mm,marginparsep=4mm]{geometry}
 \RequirePackage{fontspec}
-\RequirePackage[spanish]{babel}
+% babel-spanish con `es-noshorthands` para evitar que `<` y `>` queden
+% activos. Si el documento contiene esos caracteres en código (Python,
+% VBA, SQL, ASCII art) o dentro de tcolorbox/tikz, los shorthands de
+% babel rompen la compilación. Desactivarlos en la clase deja el documento
+% libre para usar `<` y `>` literalmente.
+\RequirePackage[spanish,es-noshorthands]{babel}
+% babel-spanish redefine \% como \es@sppercent, que inserta espaciado
+% «inteligente» antes del signo. Ese manejador inspecciona \lastskip y
+% rompe la compilación cuando se usa dentro de TikZ nodes, tcolorbox
+% baselines o cualquier contexto con cálculo de glue compuesto
+% («Incompatible glue units»). Restauramos \% al carácter literal para
+% que funcione en cualquier contexto (texto, math, tikz, tcolorbox).
+\AtBeginDocument{\renewcommand{\%}{\char37\relax}}
 \RequirePackage{microtype}
 \RequirePackage{graphicx}
 \RequirePackage{calc}
@@ -28,6 +40,7 @@
 \RequirePackage{array}
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
+\RequirePackage{amsfonts}
 \RequirePackage{siunitx}
 \RequirePackage[hidelinks]{hyperref}
 \RequirePackage{tcolorbox}
@@ -43,12 +56,20 @@
 \RequirePackage{multicol}
 \RequirePackage{amsthm}
 \RequirePackage{mathtools}
+% cleveref debe cargarse DESPUES de hyperref, amsmath y amsthm. Habilita
+% \cref{...}/\Cref{...} con prefijo y agrupacion automatica (ecs. (1)-(3),
+% Teoremas 2 y 3). capitalize=true mantiene la primera letra en mayuscula
+% al inicio de frase; nameinlink incluye el prefijo dentro del enlace.
+\RequirePackage[capitalize, noabbrev, nameinlink]{cleveref}
 \RequirePackage{varwidth}
 \RequirePackage{eso-pic}
 \RequirePackage{marginnote}
 \RequirePackage{changepage}
 \RequirePackage{caption}
 \RequirePackage{fancyvrb}
+% fvextra extiende fancyvrb con `breaklines`, necesario para los entornos
+% Highlighting compatibles con la salida LaTeX de Pandoc.
+\RequirePackage{fvextra}
 \RequirePackage{listings}
 \RequirePackage[normalem]{ulem}
 \IfFileExists{upquote.sty}{\RequirePackage{upquote}}{}
@@ -83,11 +104,34 @@
 \newunicodechar{☆}{\ensuremath{\star}}
 
 % ── Tipografías ─────────────────────────────────────────────────────────────
-% TeX Gyre ships with most modern TeX distributions and keeps the template
-% portable across Windows, macOS, Linux and CI.
-\setmainfont{TeX Gyre Pagella}
-\setsansfont{TeX Gyre Heros}
-\setmonofont{Latin Modern Mono}[Scale=0.92]
+% TeX Gyre y Latin Modern viajan con las distribuciones TeX modernas. Se
+% cargan por nombre de archivo (en lugar de nombre de sistema) para no
+% depender de la caché de fuentes del SO: así la plantilla compila igual
+% en MiKTeX, TeX Live y MacTeX sin instalar las fuentes en el sistema.
+\setmainfont{TeX Gyre Pagella}[
+  Extension      = .otf,
+  UprightFont    = texgyrepagella-regular,
+  ItalicFont     = texgyrepagella-italic,
+  BoldFont       = texgyrepagella-bold,
+  BoldItalicFont = texgyrepagella-bolditalic,
+  Ligatures      = TeX
+]
+\setsansfont{TeX Gyre Heros}[
+  Extension      = .otf,
+  UprightFont    = texgyreheros-regular,
+  ItalicFont     = texgyreheros-italic,
+  BoldFont       = texgyreheros-bold,
+  BoldItalicFont = texgyreheros-bolditalic,
+  Ligatures      = TeX
+]
+\setmonofont{Latin Modern Mono}[
+  Extension      = .otf,
+  UprightFont    = lmmono10-regular,
+  ItalicFont     = lmmonoslant10-regular,
+  BoldFont       = lmmonolt10-bold,
+  BoldItalicFont = lmmonolt10-boldoblique,
+  Scale          = 0.92
+]
 
 % ── Paleta Claude editorial ─────────────────────────────────────────────────
 \definecolor{claudeParchment}{HTML}{F5F4ED}
@@ -209,6 +253,186 @@
   \vspace{2mm}
   {\UIFont\scriptsize\color{claudeWarmSilver}\DocRef\par}
   \end{titlepage}%
+}
+
+% \ClaudeCoverEditorial — variante con composición editorial tipo revista
+% científica: banda terracota completa, ornamento tipográfico de fondo,
+% bloque marfil inferior, masthead con autor / fecha / referencia / rol /
+% estado / fase. Pensada para working papers, diarios de investigación y
+% borradores de paper.
+\NewDocumentCommand{\ClaudeCoverEditorial}{O{}}{%
+  \begin{titlepage}
+  \thispagestyle{empty}
+  \AddToShipoutPictureBG*{%
+    \begin{tikzpicture}[remember picture,overlay]
+      % Fondo pergamino
+      \fill[claudeParchment]
+        (current page.south west) rectangle (current page.north east);
+      % Banda vertical terracota completa en margen izquierdo
+      \fill[claudeTerracotta]
+        (current page.north west)
+        rectangle ([xshift=5mm]current page.south west);
+      % Bloque marfil inferior
+      \fill[claudeIvory]
+        ([xshift=20mm, yshift=20mm]current page.south west)
+        rectangle ([xshift=-20mm, yshift=82mm]current page.south east);
+      % Filete terracota sobre el bloque marfil
+      \fill[claudeTerracotta]
+        ([xshift=20mm, yshift=82mm]current page.south west)
+        rectangle ([xshift=-20mm, yshift=82.7mm]current page.south east);
+      % Ornamento tipográfico de fondo
+      \node[anchor=north east, text=claudeBorderSoft,
+            font=\rmfamily\fontsize{260}{260}\selectfont\bfseries]
+        at ([xshift=8mm, yshift=-30mm]current page.north east)
+        {\S};
+      % Marca esquinera superior derecha
+      \node[anchor=north east, text=claudeStone,
+            font=\UIFont\scriptsize\bfseries]
+        at ([xshift=-15mm, yshift=-12mm]current page.north east)
+        {\MakeUppercase{\DocFooter}};
+      % Línea horizontal superior
+      \draw[claudeBorder, line width=0.5pt]
+        ([xshift=26mm, yshift=-22mm]current page.north west) --
+        ([xshift=-26mm, yshift=-22mm]current page.north east);
+    \end{tikzpicture}%
+  }%
+  \vspace*{14mm}
+  {\UIFont\small\bfseries\color{claudeTerracotta}\MakeUppercase{\DocKicker}}\par
+  \vspace{6mm}
+  {\DisplayFont\fontsize{46}{50}\selectfont\bfseries\color{claudeInk}\RaggedRight\DocTitle\par}
+  \vspace{5mm}
+  {\UIFont\fontsize{14}{19}\selectfont\color{claudeWarmText}\RaggedRight\DocSubtitle\par}
+  \vspace{8mm}
+  {\color{claudeTerracotta}\rule{36mm}{1.4pt}}\par
+  \vfill
+  #1
+  \vspace{4mm}
+  % Masthead: tabla de metadatos en el bloque marfil inferior
+  \noindent\begin{minipage}{\linewidth}
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{@{}p{0.32\linewidth} p{0.32\linewidth} p{0.30\linewidth}@{}}
+    {\UIFont\scriptsize\color{claudeStone}\MakeUppercase{Autoría}} &
+    {\UIFont\scriptsize\color{claudeStone}\MakeUppercase{Fecha}} &
+    {\UIFont\scriptsize\color{claudeStone}\MakeUppercase{Referencia}} \\
+    {\UIFont\small\color{claudeInk}\DocAuthor} &
+    {\UIFont\small\color{claudeInk}\DocDate} &
+    {\UIFont\small\color{claudeInk}\DocRef} \\[6pt]
+    {\UIFont\scriptsize\color{claudeStone}\MakeUppercase{Rol}} &
+    {\UIFont\scriptsize\color{claudeStone}\MakeUppercase{Estado}} &
+    {\UIFont\scriptsize\color{claudeStone}\MakeUppercase{Fase}} \\
+    {\UIFont\small\color{claudeInk}\DocRole} &
+    {\UIFont\small\color{claudeInk}\ProjectStatus} &
+    {\UIFont\small\color{claudeInk}\ProjectPhase} \\
+  \end{tabular}
+  \end{minipage}\par
+  \vspace{6mm}
+  \end{titlepage}%
+}
+
+% \ClaudePaperCover — portada para borradores de paper academico /
+% working paper. Bloque de titulo con kicker, autores con afiliacion,
+% abstract, keywords y AMS subject classification. Pensada para mantener
+% el peso editorial del template sin imponer formato de revista.
+%
+% Uso (cualquier campo es opcional con \providecommand):
+%   \renewcommand{\PaperKeywords}{coeficiente AR; estimadores robustos; ...}
+%   \renewcommand{\PaperMSC}{60E15, 62G35, 65C60}
+%   \PaperAuthor{Nombre Apellido}{Universidad de X}{nombre@institucion}
+%   \PaperAuthor{...}{...}{...}   % se acumulan
+%   \begin{document}
+%   \ClaudePaperCover{Resumen del trabajo en un parrafo. Hipotesis,
+%     contribucion, contexto. 6-12 lineas.}
+\providecommand{\PaperKeywords}{}
+\providecommand{\PaperMSC}{}
+
+% Lista mutable de autores. Cada \PaperAuthor anade una fila.
+\newcommand{\@PaperAuthorList}{}
+\newcommand{\PaperAuthor}[3]{%
+  \protected@xappto\@PaperAuthorList{%
+    \noexpand\@PaperAuthorRow{#1}{#2}{#3}\noexpand\par
+  }%
+}
+\newcommand{\@PaperAuthorRow}[3]{%
+  {\UIFont\small\bfseries\color{claudeInk}#1}\quad
+  {\UIFont\small\color{claudeWarmText}#2}\quad
+  {\UIFont\scriptsize\color{claudeStone}\texttt{#3}}%
+}
+
+\NewDocumentCommand{\ClaudePaperCover}{m}{%
+  \begin{titlepage}
+  \thispagestyle{empty}
+  \AddToShipoutPictureBG*{%
+    \begin{tikzpicture}[remember picture,overlay]
+      \fill[claudeParchment]
+        (current page.south west) rectangle (current page.north east);
+      \fill[claudeTerracotta]
+        ([yshift=-34pt]current page.north west)
+        rectangle ([xshift=4.5pt,yshift=-128pt]current page.north west);
+    \end{tikzpicture}%
+  }%
+  \vspace*{6mm}
+  {\UIFont\scriptsize\bfseries\color{claudeTerracotta}\MakeUppercase{\DocKicker}}\par
+  \vspace{3mm}
+  {\DisplayFont\fontsize{26}{30}\selectfont\bfseries\color{claudeInk}\RaggedRight\DocTitle\par}
+  \vspace{3mm}
+  {\UIFont\fontsize{12}{16}\selectfont\color{claudeWarmText}\RaggedRight\DocSubtitle\par}
+  \vspace{8mm}
+  {\color{claudeTerracotta}\rule{30mm}{1.2pt}}\par
+  \vspace{6mm}
+  % Bloque de autores
+  \@PaperAuthorList
+  \vspace{4mm}
+  {\UIFont\scriptsize\color{claudeStone}\DocDate\quad·\quad\DocRef}\par
+  \vspace{8mm}
+  % Abstract editorial
+  \begin{tcolorbox}[enhanced,colback=claudeIvory,colframe=claudeBorder,
+    boxrule=0.4pt,arc=2mm,left=12pt,right=12pt,top=10pt,bottom=10pt]
+  {\UIFont\scriptsize\bfseries\color{claudeTerracotta}\MakeUppercase{Abstract}}\par
+  \vspace{4pt}
+  {\rmfamily\small\color{claudeWarmText}#1\par}
+  \end{tcolorbox}
+  \vspace{4mm}
+  % Keywords + MSC
+  \ifx\PaperKeywords\@empty\else
+    {\UIFont\scriptsize\bfseries\color{claudeStone}\MakeUppercase{Keywords}}\quad
+    {\UIFont\small\color{claudeInk}\PaperKeywords}\par
+    \vspace{2mm}
+  \fi
+  \ifx\PaperMSC\@empty\else
+    {\UIFont\scriptsize\bfseries\color{claudeStone}\MakeUppercase{AMS subject classification}}\quad
+    {\UIFont\small\color{claudeInk}\PaperMSC}\par
+  \fi
+  \vfill
+  \end{titlepage}%
+}
+
+% \begin{ClaudeAbstract} ... \end{ClaudeAbstract} — abstract editorial
+% para usar fuera de la portada (en cuerpo del documento), por si el
+% paper ya usa \maketitle estandar pero quiere un abstract con peso.
+\newenvironment{ClaudeAbstract}{%
+  \begin{tcolorbox}[enhanced,breakable,colback=claudeIvory,
+    colframe=claudeBorder,boxrule=0.4pt,arc=2mm,
+    left=12pt,right=12pt,top=10pt,bottom=10pt]
+  {\UIFont\scriptsize\bfseries\color{claudeTerracotta}\MakeUppercase{Abstract}}\par
+  \vspace{4pt}
+  \rmfamily\small\color{claudeWarmText}\ignorespaces
+}{%
+  \end{tcolorbox}%
+}
+
+% \ClaudeKeywords{lista; separada; por; punto y coma} — bloque ligero
+% para keywords cuando no se usa la portada de paper.
+\NewDocumentCommand{\ClaudeKeywords}{m}{%
+  \par\smallskip
+  {\UIFont\scriptsize\bfseries\color{claudeStone}\MakeUppercase{Keywords}}\quad
+  {\UIFont\small\color{claudeInk}#1}\par
+}
+
+% \ClaudeMSC{60E15, 62G35} — AMS Subject Classification.
+\NewDocumentCommand{\ClaudeMSC}{m}{%
+  \par
+  {\UIFont\scriptsize\bfseries\color{claudeStone}\MakeUppercase{AMS subject classification}}\quad
+  {\UIFont\small\color{claudeInk}#1}\par
 }
 
 % Comprobacion robusta para argumentos opcionales vacios.
@@ -558,8 +782,110 @@
 \newtheorem{definicion}{Definición}
 \newtheorem{ejemplo}{Ejemplo}
 
+% Conjeturas, observaciones y notas (faltaban en la cosecha original).
+% conjetura usa estilo claudethm para que comparta cabecera terracota con
+% teoremas; observacion y nota usan un estilo "remark" mas tenue.
+\newtheorem{conjetura}[teorema]{Conjetura}
+
+\newtheoremstyle{claudermk}
+  {0.6em}{0.4em}
+  {}                                                  % cuerpo en redonda
+  {0pt}
+  {\UIFont\bfseries\color{claudeWarmText}}            % cabecera mas tenue
+  { · }
+  {0.4em}
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ \mdseries\itshape\color{claudeStone}#3}}
+
+\theoremstyle{claudermk}
+\newtheorem{observacion}[teorema]{Observación}
+\newtheorem{nota}[teorema]{Nota}
+
+% Alias en ingles para borradores SIAM-style. Comparten contador con sus
+% homologos en castellano para que un teorema en espanol y uno en ingles
+% se numeren en la misma serie.
+\theoremstyle{claudethm}
+\newtheorem{theorem}[teorema]{Theorem}
+\newtheorem{proposition}[teorema]{Proposition}
+\newtheorem{lemma}[teorema]{Lemma}
+\newtheorem{corollary}[teorema]{Corollary}
+\newtheorem{definition}[teorema]{Definition}
+\newtheorem{example}[teorema]{Example}
+\newtheorem{conjecture}[teorema]{Conjecture}
+\newtheorem{axiom}[teorema]{Axiom}
+\theoremstyle{claudermk}
+\newtheorem{remark}[teorema]{Remark}
+\newtheorem{note}[teorema]{Note}
+
 % Símbolo Halmos al final de demostración
 \renewcommand{\qedsymbol}{\textcolor{claudeTerracotta}{$\blacksquare$}}
+
+% Renombrar la cabecera de proof a un estilo Claude. amsthm define
+% \proofname; la rodeamos con UIFont y color terracota suave.
+\renewcommand{\proofname}{\UIFont\bfseries\color{claudeTerracotta}Demostración}
+
+% ── Macros matemáticas reutilizables ────────────────────────────────────────
+% Conjuntos numericos en pizarra. Provee \R, \N, \Z, \Q, \C; respetar si el
+% documento las habia definido (\providecommand) para no romper papers que
+% ya las traen.
+\providecommand{\R}{\mathbb{R}}
+\providecommand{\N}{\mathbb{N}}
+\providecommand{\Z}{\mathbb{Z}}
+\providecommand{\Q}{\mathbb{Q}}
+\providecommand{\C}{\mathbb{C}}
+\providecommand{\F}{\mathbb{F}}
+
+% Operadores de probabilidad y estadistica.
+\providecommand{\E}{\mathbb{E}}
+\providecommand{\Prob}{\mathbb{P}}
+\providecommand{\Var}{\operatorname{Var}}
+\providecommand{\Cov}{\operatorname{Cov}}
+\providecommand{\Corr}{\operatorname{Corr}}
+\providecommand{\Bias}{\operatorname{Bias}}
+\providecommand{\MSE}{\operatorname{MSE}}
+
+% Operadores de algebra lineal.
+\providecommand{\rank}{\operatorname{rank}}
+\providecommand{\tr}{\operatorname{tr}}
+\providecommand{\diag}{\operatorname{diag}}
+\providecommand{\spn}{\operatorname{span}}
+\providecommand{\im}{\operatorname{im}}
+
+% Operadores logicos / orden / signos.
+\providecommand{\sign}{\operatorname{sign}}
+\providecommand{\sgn}{\operatorname{sgn}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+% Norms y valor absoluto con autosizing (mathtools \DeclarePairedDelimiter).
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\inner}{\langle}{\rangle}
+\DeclarePairedDelimiter{\set}{\{}{\}}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+% Indicador, derivada y diferenciales.
+\providecommand{\indicator}[1]{\mathbf{1}_{\{#1\}}}
+\providecommand{\dif}{\mathop{}\!\mathrm{d}}     % diferencial: \int f \dif x
+\providecommand{\eps}{\varepsilon}
+\providecommand{\veps}{\varepsilon}
+\providecommand{\given}{\,\vert\,}                % barra para condicionales
+
+% Vectores/matrices en negrita; respetar definicion previa si existia.
+\providecommand{\vect}[1]{\mathbf{#1}}
+\providecommand{\mat}[1]{\mathbf{#1}}
+
+% ── Estilo editorial para ecuaciones ───────────────────────────────────────
+% Numeracion en terracota suave. Aplica a equation, align, gather...
+\makeatletter
+\def\tagform@#1{\maketag@@@{\color{claudeTerracotta}(#1)\@@italiccorr}}
+\makeatother
+
+% Espaciado pre/post display generoso (mathjax-like).
+\setlength{\abovedisplayskip}{0.55em}
+\setlength{\belowdisplayskip}{0.55em}
+\setlength{\abovedisplayshortskip}{0.35em}
+\setlength{\belowdisplayshortskip}{0.35em}
 
 % ── Side macros (notas en margen) ───────────────────────────────────────────
 % Nota: el documento base usa márgenes simétricos sin marginpar muy ancho.
@@ -1436,22 +1762,29 @@
 \newcolumntype{P}[1]{>{\Centering\arraybackslash}p{#1}}
 \newcolumntype{M}[1]{>{\Centering\arraybackslash}m{#1}}
 
+% \rowcolors{2}{...}{...} en combinación con booktabs (\toprule, \bottomrule)
+% y una primera fila con \rowcolor produce "Misplaced \noalign" en xetex.
+% Para mantener rayado alterno usamos \arrayrulecolor + \arraystretch y se
+% aplica el color por fila en el cuerpo si se desea (ver \ClaudeRowAlt).
 \NewDocumentCommand{\ClaudeTableSetup}{}{%
-  \rowcolors{2}{tableLineOne}{tableLineTwo}%
   \arrayrulecolor{claudeCodeRule}%
   \renewcommand{\arraystretch}{1.35}%
 }
-\NewDocumentCommand{\ClaudeTableHeader}{}{%
+% \rowcolor depende del contexto de \noalign dentro de tabular. Si se envuelve
+% con \NewDocumentCommand (que protege la expansión), TeX ve \rowcolor fuera
+% del contexto de fila y emite "Misplaced \noalign". Con \newcommand la
+% expansión es transparente y \rowcolor encuentra el contexto correcto.
+\newcommand{\ClaudeTableHeader}{%
   \rowcolor{claudeBorderSoft}\bfseries\color{claudeTerracotta}%
 }
-\NewDocumentEnvironment{ClaudeTable}{m}{%
-  \begingroup
-  \ClaudeTableSetup
-  \begin{tabularx}{\linewidth}{#1}
-}{%
-  \end{tabularx}
-  \endgroup
-}
+% IMPORTANTE: tabularx escanea su cuerpo buscando \end{tabularx} literal.
+% Si se envuelve con \NewDocumentEnvironment, ese escaneo falla y se obtiene
+% "Runaway argument? File ended while scanning use of \TX@get@body".
+% Usamos \newenvironment para que el cuerpo se reemplace textualmente y
+% \end{tabularx} aparezca en el stream de entrada como literal.
+\newenvironment{ClaudeTable}[1]
+  {\begingroup\ClaudeTableSetup\tabularx{\linewidth}{#1}}
+  {\endtabularx\endgroup}
 
 % ── Diagramas: estilos nativos, sin depender de paquetes externos ──────────
 \makeatletter
@@ -1489,6 +1822,7 @@
     rectangle split,
     rectangle split parts=3,
     rectangle split part align={center,left,left},
+    align=center,
     draw=claudeBorder,
     fill=claudeIvory,
     text=claudeInk,

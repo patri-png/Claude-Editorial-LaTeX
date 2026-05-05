@@ -1,0 +1,297 @@
+% =============================================================================
+%  De las Matemáticas al Código — Interpolación, la base invisible
+%  Portado al sistema visual claudeeditorial: las cajas math/code de
+%  LinkedIn pasan a ClaudeCard + ClaudeCode con titulo en terracota.
+%  Compilacion: xelatex aphorisms/interpolacion-codigo.tex
+% =============================================================================
+\documentclass{claudeeditorial}
+
+\renewcommand{\DocKicker}{Ingeniería de prompts · Curso 2025/2026}
+\renewcommand{\DocTitle}{De las matemáticas al código}
+\renewcommand{\DocSubtitle}{Interpolación, la base invisible de la tecnología — fórmulas y código Python lado a lado}
+\renewcommand{\DocAuthor}{Patricio Hernández Ballester · @MevakeshEmetGPT}
+\renewcommand{\DocRole}{Ingeniero de prompts}
+\renewcommand{\DocDate}{30 de octubre de 2025}
+\renewcommand{\DocRef}{INT-CODE-001}
+\renewcommand{\DocFooter}{claudeeditorial · interpolación}
+
+\renewcommand{\ProjectName}{Matemáticas $\to$ Código}
+\renewcommand{\ProjectPhase}{4000 años de interpolación}
+\renewcommand{\ProjectStatus}{Babilonia $\to$ ChatGPT}
+
+\hypersetup{
+  pdftitle={De las Matematicas al Codigo - Interpolacion},
+  pdfauthor={MevakeshEmetGPT},
+  pdfkeywords={interpolación, Python, machine learning, matemáticas}
+}
+
+\ClaudeRunningHeader
+
+\begin{document}
+\BodyCopy
+\ClaudeCover
+
+\ClaudeChapterPage{00}{Resumen}{Cada fórmula que verás tiene su implementación Python al lado: las ecuaciones de clase son las mismas que ejecutan los algoritmos de IA.}
+
+\begin{claudehero}
+\ClaudeLead{Todo el software que usamos —desde Google hasta ChatGPT— está construido sobre fórmulas matemáticas. Este documento revela cómo las ecuaciones se convierten en código ejecutable, mostrando que las matemáticas no son abstractas: son el lenguaje con el que programamos el futuro.}
+\end{claudehero}
+
+\section{El problema fundamental}
+
+Imagina mediciones de una función misteriosa:
+
+\begin{ClaudeTable}{@{}c c c c c c@{}}
+\ClaudeTableHeader $t$ & $0$ & $1$ & $2$ & $5$ & $10$ \\
+\toprule
+$v$ & $1{,}00$ & $0{,}95$ & $0{,}90$ & $0{,}80$ & $0{,}65$ \\
+\bottomrule
+\end{ClaudeTable}
+
+\textbf{Pregunta:} ¿qué valor tiene la función en $t=3{,}5$?
+
+\begin{ClaudeInfo}[Esta pregunta es la base de\ldots]
+\begin{itemize}[leftmargin=1.2em,nosep]
+\item \textbf{GPS:} calcular tu posición entre señales de satélite.
+\item \textbf{Netflix:} predecir qué películas te gustarán.
+\item \textbf{Spotify:} generar transiciones suaves entre canciones.
+\item \textbf{ChatGPT:} interpolar en espacios de $12.288$ dimensiones.
+\item \textbf{Medicina:} estimar dosis entre mediciones discretas.
+\end{itemize}
+\end{ClaudeInfo}
+
+\ClaudeChapterPage{01}{Matemáticas $\to$ código}{Ver para creer: la fórmula matemática \emph{es} el algoritmo.}
+
+\section{Interpolación lineal}
+
+\begin{ClaudeCard}{Fórmula}
+\begin{align*}
+  \lambda &= \frac{t - t_0}{t_1 - t_0}, \\
+  y &= v_0 + (v_1 - v_0)\lambda \;=\; (1-\lambda)\,v_0 + \lambda\,v_1.
+\end{align*}
+\end{ClaudeCard}
+
+\begin{ClaudeCode}[title={interpolación lineal}]{Python}
+lambda_ = (t - T[l]) / (T[r] - T[l])
+y       = V[l] + (V[r] - V[l]) * lambda_
+# equivalente:
+y       = (1 - lambda_) * V[l] + lambda_ * V[r]
+\end{ClaudeCode}
+
+\Highlight{¿Lo ves?} Matemáticas y código son exactamente lo mismo. La fórmula matemática \emph{es} el algoritmo. No hay magia, solo traducción directa.
+
+\section{Interpolación log-lineal (exponencial)}
+
+\begin{ClaudeCard}{Fórmula}
+\begin{align*}
+  y &= v_0^{\,1-\lambda}\cdot v_1^{\,\lambda}, \\
+  \ln y &= (1-\lambda)\ln v_0 + \lambda\ln v_1.
+\end{align*}
+\end{ClaudeCard}
+
+\begin{ClaudeCode}[title={interpolación log-lineal}]{Python}
+lambda_ = (t - T[l]) / (T[r] - T[l])
+
+# Opción 1: potencias
+y = V[l]**(1 - lambda_) * V[r]**lambda_
+
+# Opción 2: logaritmos (más estable)
+y = np.exp(np.log(V[l]) + (np.log(V[r]) - np.log(V[l])) * lambda_)
+\end{ClaudeCode}
+
+\ClaudeChapterPage{02}{La función completa}{30 líneas que valen oro: del VBA de 1990 al Python de 2025.}
+
+\begin{ClaudeCode}[title={interpolacion.py — búsqueda binaria $O(\log n)$ + selección método}]{Python}
+import numpy as np
+from numpy.typing import NDArray
+
+def interpolacion(
+    t: float,                     # punto donde interpolar
+    T: NDArray[np.floating],      # vector de tiempos
+    V: NDArray[np.floating],      # vector de valores
+    m: int = 0,                   # 0=exponencial, 1=lineal
+) -> float:
+    n = len(T)
+    l, r = 0, n - 1
+
+    # Búsqueda binaria: O(log n)
+    while r - l > 1:
+        mid = (l + r) // 2
+        if T[mid] >= t:
+            r = mid
+        else:
+            l = mid
+
+    lambda_ = (t - T[l]) / (T[r] - T[l])
+
+    if m == 0:                    # exponencial (log-lineal)
+        if V[l] > 0 and V[r] > 0:
+            return np.exp(np.log(V[l]) + (np.log(V[r]) - np.log(V[l])) * lambda_)
+        return np.nan
+
+    elif m == 1:                  # lineal
+        if t <= T[0]:  return V[0]
+        if t >= T[-1]: return V[-1]
+        return V[l] + (V[r] - V[l]) * lambda_
+
+    return np.nan
+\end{ClaudeCode}
+
+\begin{ClaudeTip}[Esta función de 30 líneas\ldots]
+\ldots\ implementa matemáticas que tienen \Highlight{4000 años de historia}.
+\end{ClaudeTip}
+
+\ClaudeChapterPage{03}{Viaje en el tiempo}{De Babilonia a ChatGPT — 4000 años de interpolación.}
+
+\subsection{1800 a.\,C.\ · Babilonia}
+
+Los sacerdotes astrónomos predecían eclipses lunares con tablillas cuneiformes de diferencias. Si la Luna estaba en $p_1$ el día 30 y $p_2$ el día 60, estimaban el día 45 como
+\[
+  p_{45} \approx \frac{p_1 + p_2}{2}.
+\]
+
+\Highlight{¡Interpolación lineal hace 4000 años!}
+
+\subsection{1687 · Newton}
+
+En \emph{Philosophiæ Naturalis Principia Mathematica}, las diferencias finitas:
+\[
+  p(x) = p_0 + \Delta p_0 \frac{x-x_0}{h} + \frac{\Delta^2 p_0}{2!}\frac{(x-x_0)(x-x_1)}{h^2} + \cdots
+\]
+\textbf{Aplicación real:} predecir el retorno del cometa Halley (1758).
+
+\subsection{1944 · ENIAC}
+
+Primer computador electrónico: trayectorias balísticas en la 2.\textsuperscript{a} GM. \textbf{Input:} tablas de resistencia del aire vs.\ velocidad. \textbf{Proceso:} interpolación lineal entre puntos tabulados. \textbf{Output:} ángulo de disparo óptimo. La primera aplicación de computación digital.
+
+\subsection{2018 · Neural ODEs}
+
+Chen et al., NeurIPS Best Paper. Las capas de una red neuronal son interpolaciones continuas:
+\[
+  \frac{dh(t)}{dt} = f\bigl(h(t),t,\theta\bigr), \qquad h(0) = x_{\text{input}}.
+\]
+
+\subsection{2025 · ChatGPT y Transformers}
+
+GPT-4 tiene embeddings de $12.288$ dimensiones:
+\[
+  \operatorname{embedding}(\text{«matemática»}) = \mathbf{v}\in\R^{12288}.
+\]
+
+Las \emph{attention heads} calculan interpolaciones ponderadas:
+\[
+  \text{output} = \sum_{i=1}^{n}\alpha_i\,\mathbf{v}_i, \qquad \sum_i \alpha_i = 1.
+\]
+
+\Highlight{Es interpolación lineal en hiperespacios.}
+
+\ClaudeChapterPage{04}{Fundamentos matemáticos}{Existencia, unicidad y análisis de error.}
+
+\begin{ClaudeCard}{Teorema fundamental}
+Dados $n+1$ puntos distintos $(x_i,y_i)$, existe un único polinomio $p(x)$ de grado $\leq n$ tal que $p(x_i)=y_i$.
+
+\textbf{Demostración constructiva (Lagrange):}
+\[
+  p(x) = \sum_{i=0}^{n} y_i \prod_{j\neq i} \frac{x-x_j}{x_i-x_j}.
+\]
+\end{ClaudeCard}
+
+\begin{ClaudeInfo}[Análisis de error]
+Para $f\in C^2[a,b]$, el error de interpolación lineal es
+\[
+  \abs{f(t) - p_1(t)} \leq \frac{1}{8}\max_\xi \abs{f''(\xi)}\,(t_1-t_0)^2 = O(h^2).
+\]
+\textbf{Implicación práctica:} si divides el intervalo por $2$, el error se divide por $4$.
+\end{ClaudeInfo}
+
+\ClaudeChapterPage{05}{Aplicaciones modernas}{Cómo usas interpolación sin saberlo.}
+
+\section{MixUp · data augmentation por interpolación}
+
+\begin{ClaudeCard}{MixUp en acción (Zhang et al., ICLR 2018)}
+\begin{align*}
+  \tilde{x} &= \lambda x_i + (1-\lambda)\,x_j, \\
+  \tilde{y} &= \lambda y_i + (1-\lambda)\,y_j, \qquad
+  \lambda \sim \operatorname{Beta}(\alpha,\alpha).
+\end{align*}
+\end{ClaudeCard}
+
+\begin{ClaudeCode}[title={MixUp · 4 líneas, +2-4\,\% de precisión en ImageNet}]{Python}
+lambda_ = np.random.beta(alpha, alpha)
+x_mixed = lambda_ * x[i] + (1 - lambda_) * x[j]
+y_mixed = lambda_ * y[i] + (1 - lambda_) * y[j]
+model.train(x_mixed, y_mixed)
+\end{ClaudeCode}
+
+\section{VAEs · interpolación en espacios latentes}
+
+Los Variational Autoencoders interpolan en espacios latentes para generar nuevas imágenes:
+\[
+  z_\lambda = (1-\lambda)\,z_1 + \lambda\,z_2, \qquad x_\lambda = \operatorname{Decoder}(z_\lambda).
+\]
+\textbf{Ejemplo real:} DALL-E 2 interpola entre «un gato» y «un perro» para generar híbridos.
+
+\section{Spotify · transiciones suaves}
+
+\[
+  \text{audio}(t) = \bigl(1-\lambda(t)\bigr)\cdot\text{canción}_1(t) + \lambda(t)\cdot\text{canción}_2(t),
+\]
+con $\lambda(t)$ variando suavemente de $0$ a $1$.
+
+\section{GPS · tu ubicación es una interpolación}
+
+Tu teléfono recibe señales de $4{+}$ satélites con timestamps $t_i$. Tu posición es la interpolación ponderada
+\[
+  \mathbf{p}_{\text{tú}} = \sum_{i=1}^{n} w_i\,\mathbf{p}_{\text{satélite}_i},
+\]
+donde los pesos $w_i$ dependen de la fuerza de la señal.
+
+\section{Comparación lineal vs.\ log-lineal}
+
+\begin{ClaudeTable}{@{}lL L@{}}
+\ClaudeTableHeader Aspecto & Lineal & Log-lineal \\
+\toprule
+Fórmula & $(1-\lambda)v_0 + \lambda v_1$ & $v_0^{1-\lambda} v_1^{\lambda}$ \\
+Espacio & $\R$ (aditivo) & $\R_{>0}$ (multiplicativo) \\
+Punto medio & $(v_0+v_1)/2$ & $\sqrt{v_0 v_1}$ \\
+Error & $O(h^2)$ & $O(h^2)$ \\
+Uso típico & temperatura, distancia & tasas, crecimiento \\
+\bottomrule
+\end{ClaudeTable}
+
+\bigskip
+
+\begin{ClaudeTip}[Regla de oro]
+\textbf{Lineal} para temperatura, distancia, suma de cantidades. \textbf{Log-lineal} para precios, tasas de interés, probabilidades, factores de crecimiento.
+\end{ClaudeTip}
+
+\ClaudeChapterPage{06}{Invitación}{Despierta tu curiosidad matemática.}
+
+\begin{ClaudeCard}{Cada tecnología que usas está construida sobre matemáticas}
+\begin{itemize}[leftmargin=1.2em,nosep]
+\item Tu \textbf{smartphone} calcula millones de interpolaciones por segundo (GPS, audio, video, pantalla táctil).
+\item \textbf{ChatGPT} hace interpolaciones en espacios de $12.288$ dimensiones para generar cada palabra.
+\item \textbf{Netflix} interpola tus preferencias con las de millones de usuarios.
+\item Los \textbf{coches autónomos} interpolan datos de sensores a $60$\,Hz.
+\item Las \textbf{vacunas de ARNm} se diseñaron usando interpolación de estructuras moleculares.
+\end{itemize}
+\end{ClaudeCard}
+
+\begin{ClaudeCheck}[El mensaje final]
+\begin{enumerate}[leftmargin=1.4em,nosep]
+\item Las fórmulas se convierten en código ejecutable.
+\item $4000$ años de matemáticas viven en $30$ líneas de Python.
+\item Tu curiosidad matemática es la llave para entender la IA, ML y DL.
+\end{enumerate}
+\end{ClaudeCheck}
+
+\vfill
+
+\begin{center}
+{\UIFont\small\color{claudeWarmText}\itshape «Las matemáticas son el alfabeto con el que Dios escribió el universo.»}\\[0.2em]
+{\UIFont\scriptsize\color{claudeStone}— Galileo Galilei}
+\end{center}
+
+\ClaudeSignature{\DocAuthor}{\DocRole}
+
+\end{document}

@@ -29,6 +29,12 @@ _minted*/
 *.ps
 *.dvi
 
+# Excepción: la galería pre-renderizada de la plantilla SÍ se versiona, para
+# que el README de GitHub pueda mostrar capturas y permitir descargar PDFs
+# de ejemplo sin requerir compilación local.
+!docs/preview/**/*.pdf
+!docs/preview/**/*.png
+
 # Local backups and archives
 *.bak
 *.backup

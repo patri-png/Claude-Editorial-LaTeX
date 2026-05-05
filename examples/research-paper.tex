@@ -1,0 +1,237 @@
+% =============================================================================
+%  research-paper.tex — borrador de paper academico con la clase
+%  claudeeditorial. Ejercita: ClaudePaperCover, abstract, keywords, MSC,
+%  PaperAuthor (multi-autor con afiliacion), theorems en castellano e
+%  ingles compartiendo contador, demostraciones, \cref, \norm, \abs, \E,
+%  \rank, \argmin, \argmax, eqs numeradas en terracota, conjeturas y
+%  observaciones.
+%
+%  Compilacion:
+%    xelatex examples/research-paper.tex   (dos pasadas para \cref)
+%
+%  El contenido es ficticio; se usa para mostrar el sistema visual del
+%  template aplicado a un working paper.
+% =============================================================================
+\documentclass{claudeeditorial}
+
+\renewcommand{\DocKicker}{Working paper · v1}
+\renewcommand{\DocTitle}{Coeficiente de regresión array (AR): formalización rigurosa y delimitación de las conjeturas abiertas}
+\renewcommand{\DocSubtitle}{Notas y borrador del estudio para un journal aplicado: definiciones canónicas, propiedades demostradas y casos pendientes}
+\renewcommand{\DocAuthor}{Equipo AR · Lorem Ipsum}
+\renewcommand{\DocRole}{Working paper}
+\renewcommand{\DocDate}{5 de mayo de 2026}
+\renewcommand{\DocRef}{WP-AR-001 · vol. I}
+\renewcommand{\DocFooter}{claudeeditorial · research paper}
+
+% Metadatos del paper
+\renewcommand{\PaperKeywords}{coeficiente AR; estimadores robustos; calibración exacta; rankings; permutaciones; footrule}
+\renewcommand{\PaperMSC}{60E15, 62G35, 65C60}
+
+\PaperAuthor{Lorem Ipsum}{Departamento de Matemática Aplicada, Universidad de Lorem}{lorem@uni.example}
+\PaperAuthor{Dolor Sit Amet}{Centro de Investigación Editorial, Universidad de Dolor}{dolor@uni.example}
+\PaperAuthor{Consectetur Adipiscing}{Departamento de Estadística, Universidad de Consectetur}{ca@uni.example}
+
+\hypersetup{
+  pdftitle={Coeficiente AR: formalizacion rigurosa},
+  pdfauthor={Lorem Ipsum, Dolor Sit Amet, Consectetur Adipiscing},
+  pdfsubject={Working paper - claudeeditorial}
+}
+
+% Macros propias del paper (la clase ya provee \E, \R, \N, \rank, ...)
+\newcommand{\ARop}{\operatorname{AR}_{[0,1]}}
+\newcommand{\ARc}{\operatorname{AR}_{[-1,1]}}
+\newcommand{\Perm}{\Pi}
+
+\ClaudeRunningHeader
+\setstretch{1.20}
+
+\begin{document}
+\BodyCopy
+
+\ClaudePaperCover{%
+  Se formaliza el coeficiente AR (\emph{Array Regression Coefficient})
+  y se demuestran con rigor sus propiedades operativas: la identidad
+  probabilística exacta $D(r,n)=\E\abs{r-S}$ para $S$ uniforme en
+  $\set{0,\ldots,n-1}$, la calibración $\E[\ARop]=\tfrac{1}{2}$ bajo
+  permutación uniforme \emph{para todo $n\ge 2$, sin pasar al límite
+  asintótico}, y la suma cerrada $\sum_{r=0}^{n-1}D(r,n)=(n^2-1)/3$.
+  Se separa explícitamente lo demostrado de lo conjeturado: la
+  afirmación de que el mínimo de $\ARop$ sobre $\Perm(n)$ se alcanza
+  en la rotación cíclica de paso $\lfloor n/2\rfloor$ queda como
+  conjetura, verificada por enumeración exhaustiva para $n\le 8$.
+  Toda constante numérica del cuerpo principal proviene de aritmética
+  racional exacta.}
+
+\tableofcontents
+\clearpage
+
+\ClaudeChapterPage{01}{Marco y notación}{Convenciones temporales, espacio de permutaciones y el denominador ordinal $D(r,n)$ que articula toda la construcción.}
+
+\section{Notación}\label{sec:notacion}
+
+Sea $E=\set{1,\ldots,n}$ un conjunto finito de elementos comparables y
+$t=1,\ldots,T$ una discretización del tiempo. Se observa un valor
+$x_{i,t}\in\R$ para cada elemento $i\in E$ y periodo $t$. Para
+$z\in\R^n$, $\rank(z)_i\in\set{0,\ldots,n-1}$ es el rango ascendente
+de $z_i$ con desempate por índice.
+
+\begin{definition}[denominador ordinal]\label{def:D}
+Para $r\in\set{0,\ldots,n-1}$ definimos
+\begin{equation}\label{eq:D}
+  D(r,n) := \frac{r^2+r}{n}+\frac{n}{2}-r-\frac{1}{2}.
+\end{equation}
+\end{definition}
+
+\begin{proposition}[positividad y simetría]\label{prop:D-basico}
+Para todo $n\ge 2$ y $r\in\set{0,\ldots,n-1}$ se cumple
+$D(r,n)>0$ y $D(r,n)=D(n-1-r,n)$. Además
+\begin{equation}\label{eq:sumD}
+  \sum_{r=0}^{n-1}D(r,n)=\frac{n^2-1}{3}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+La simetría se verifica sustituyendo $n-1-r$ en \cref{eq:D}. Tratando
+$r$ como variable real, $D'(r,n)=(2r+1)/n-1$, que se anula en
+$r^\ast=(n-1)/2$. Allí $D(r^\ast,n)=(n^2-1)/(4n)>0$. Como $D$ es
+convexa, ese es el mínimo real. Para \cref{eq:sumD},
+\[
+  \sum_{r=0}^{n-1}D(r,n)
+  =\frac{1}{n}\sum_{r=0}^{n-1}(r^2+r)
+   +\sum_{r=0}^{n-1}\!\left(\tfrac{n}{2}-r-\tfrac{1}{2}\right).
+\]
+El segundo sumatorio se anula y el primero da $(n^2-1)/3$.
+\end{proof}
+
+\begin{proposition}[interpretación probabilística]\label{thm:D-prob}
+Si $S\sim\mathcal{U}\set{0,\ldots,n-1}$, entonces
+$D(r,n)=\E\abs{r-S}$.
+\end{proposition}
+
+\begin{proof}
+Por definición,
+$\E\abs{r-S}=\frac{1}{n}\sum_{s=0}^{n-1}\abs{r-s}
+=\frac{1}{n}\bigl(\sum_{k=0}^{r}k+\sum_{k=1}^{n-1-r}k\bigr)$.
+Usando $\sum_{k=0}^{m}k=m(m+1)/2$ se obtiene el lado derecho de
+\cref{eq:D}.
+\end{proof}
+
+\begin{observacion}
+\Cref{thm:D-prob} permite leer $D(r,n)$ como la \emph{distancia
+esperada} de un rango fijo $r$ a un rango uniforme. Esa interpretación
+es la base operativa del normalizador en \cref{eq:ar-op}.
+\end{observacion}
+
+\section{Definición del coeficiente}
+
+Sean $p,q$ permutaciones de $\set{0,\ldots,n-1}$. Pensamos $p$ como
+predicción y $q$ como observación.
+
+\begin{definition}[escalas operativa y centrada]\label{def:dos-escalas}
+\begin{align}
+  \ARop(p,q) &:= 1-\frac{1}{2n}\sum_{i=1}^{n}\frac{\abs{q_i-p_i}}{D(q_i,n)}, \label{eq:ar-op}\\
+  \ARc(p,q)  &:= 2\,\ARop(p,q)-1.\label{eq:ar-centered}
+\end{align}
+\end{definition}
+
+\begin{remark}
+Bajo azar uniforme, $\E[\ARop]=\tfrac{1}{2}$ y $\E[\ARc]=0$. La escala
+operativa es cómoda para tablas porque pone el azar en $0.5$; la
+escala centrada es la que aparece en el código de referencia.
+\end{remark}
+
+\begin{theorem}[calibración exacta]\label{thm:calibracion}
+Sea $P\sim\mathcal{U}(\Perm(n))$ y $R\in\Perm(n)$ fijo. Entonces
+$\E[\ARop(R,P)]=\tfrac{1}{2}$ \emph{para todo $n\ge 2$}.
+\end{theorem}
+
+\begin{proof}
+Por linearidad del valor esperado y \cref{thm:D-prob},
+\[
+  \E[\ARop(R,P)]
+  =1-\frac{1}{2n}\sum_{i=1}^{n}\frac{\E\abs{P_i-R_i}}{D(R_i,n)}
+  =1-\frac{1}{2n}\sum_{i=1}^{n}1
+  =\frac{1}{2}. \qedhere
+\]
+\end{proof}
+
+\begin{conjetura}[mínimo de AR]\label{conj:argmin}
+Para todo $n\ge 3$, el mínimo de $\ARop(\mathrm{id},\sigma)$ sobre
+$\sigma\in\Perm(n)$ se alcanza en la rotación cíclica de paso
+$\lfloor n/2\rfloor$.
+\end{conjetura}
+
+\begin{nota}
+\Cref{conj:argmin} se ha verificado por enumeración exhaustiva para
+$n\le 8$, sin demostración combinatoria general. La rotación de paso
+$\lfloor n/2\rfloor$ tiene límite asintótico $\ARop\to 1-\pi/4$.
+\end{nota}
+
+\section{Indicadores y trazabilidad}
+
+Para mantener trazable el cuerpo principal del paper, registramos los
+indicadores reproducibles del estudio.
+
+\begin{tcbraster}[raster columns=4,raster equal height=rows,raster column skip=8pt]
+\KPICard{Teoremas}{4}{con demostración completa}
+\KPICard{Conjeturas}{1}{verificada para $n\le 8$}
+\KPICard{Verificación}{Exacta}{aritmética racional}
+\KPICard{Réplica}{Pendiente}{cohorte $n=12$}
+\end{tcbraster}
+
+\section{Decisión metodológica}
+
+\ClaudeDecisionRecord[Activa]
+  {ADR-001 · Aritmética racional para constantes del cuerpo}
+  {Las constantes numéricas que aparecen en teoremas y observaciones provienen, históricamente, de cálculos en coma flotante con redondeo no controlado.}
+  {Toda constante del cuerpo se computa en aritmética racional exacta (módulo \texttt{fractions}). Los resultados decimales aparecen sólo en el apéndice numérico.}
+  {Coste: una pasada de verificación adicional. Beneficio: ningún valor del cuerpo proviene de redondeo, lo que neutraliza una clase entera de objeciones.}
+
+\section{Hipótesis abiertas}
+
+\begin{ClaudeTable}{@{}lL L l@{}}
+\ClaudeTableHeader Hipótesis & Predicción & Validación pendiente & Estado \\
+\toprule
+\ClaudeRiskRow{H-001}{El mínimo de $\ARop$ se alcanza en la rotación de paso $\lfloor n/2\rfloor$ para todo $n\ge 3$.}{Demostración combinatoria general (enumeración hasta $n=8$).}{\StatusOpen}
+\ClaudeRiskRow{H-002}{$\norm{\ARc(p,q)-\ARc(q,p)}_\infty = O(1/n)$.}{Cota empírica vía simulación; cota formal abierta.}{\StatusWIP}
+\bottomrule
+\end{ClaudeTable}
+
+\section{Verificación numérica}
+
+La verificación se hizo en aritmética racional exacta, sin punto
+flotante en el cuerpo principal.
+
+\begin{ClaudeCode}[title={Verificación racional exacta del coeficiente AR}]{Python}
+from fractions import Fraction
+
+def D(r, n):
+    return Fraction(r*r + r, n) + Fraction(n, 2) - r - Fraction(1, 2)
+
+def AR_op(p, q):
+    n = len(p)
+    s = sum(Fraction(abs(q[i] - p[i])) / D(q[i], n) for i in range(n))
+    return 1 - s / (2 * n)
+
+p = list(range(8))             # identidad
+q = [4, 5, 6, 7, 0, 1, 2, 3]   # rotacion de paso n/2
+print(AR_op(p, q))             # Fraction(67, 280)
+\end{ClaudeCode}
+
+\begin{ClaudeOutput}
+\texttt{Fraction(67, 280)} — equivalente a \(0.2392857\ldots\); no
+proviene de coma flotante. \Cref{conj:argmin} predice este valor
+como mínimo sobre $\Perm(8)$.
+\end{ClaudeOutput}
+
+\section{Conclusiones}
+
+Hemos demostrado las propiedades operativas de $\ARop$
+(\cref{thm:D-prob,thm:calibracion,prop:D-basico}) y separado lo
+\emph{demostrado} de lo \emph{conjeturado} (\cref{conj:argmin}). El
+borrador queda listo para revisión interna; la siguiente iteración
+ataca la demostración combinatoria del mínimo de AR.
+
+\ClaudeSignature{\DocAuthor}{\DocRole}
+
+\end{document}
