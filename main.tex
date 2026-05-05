@@ -1,0 +1,104 @@
+\documentclass{claudeeditorial}
+
+% Optional bibliography layer. Keep it in the document entrypoint, not in the
+% class, so the visual system remains reusable for documents without citations.
+\usepackage{csquotes}
+\usepackage[backend=biber,style=authoryear,maxcitenames=2]{biblatex}
+\addbibresource{bibliography/references.bib}
+
+\renewcommand{\DocKicker}{Project Engineering}
+\renewcommand{\DocTitle}{Manual de marcha}
+\renewcommand{\DocSubtitle}{Documento diario para decisiones, riesgos, arquitectura, evidencias y seguimiento de ingeniería}
+\renewcommand{\DocAuthor}{Equipo de proyecto}
+\renewcommand{\DocRole}{Project engineering}
+\renewcommand{\DocDate}{\today}
+\renewcommand{\DocRef}{MAIN-001}
+\renewcommand{\DocFooter}{claudeeditorial main}
+
+\renewcommand{\ProjectName}{Nombre del proyecto}
+\renewcommand{\ProjectPhase}{Fase actual}
+\renewcommand{\ProjectOwner}{Equipo responsable}
+\renewcommand{\ProjectStatus}{Activo}
+
+\hypersetup{
+  pdftitle={Manual de marcha},
+  pdfauthor={Equipo de proyecto},
+  pdfsubject={Diario de ingeniería de proyectos},
+  pdfkeywords={project engineering, LaTeX, documentation, decision record}
+}
+
+\ClaudeRunningHeader
+\setstretch{1.22}
+
+\begin{document}
+\BodyCopy
+
+\ClaudeCover
+
+\tableofcontents
+\clearpage
+
+\ClaudeChapterPage{01}{Situación diaria}{La página que mantiene alineado al equipo: qué cambió, qué se decidió, qué sigue abierto y dónde mirar.}
+
+\ClaudeProjectHeader
+  {\ProjectName}
+  {Actualización ejecutiva y técnica para trabajo diario de ingeniería.}
+  {\DocDate}
+  {\ProjectStatus}
+
+\section{Resumen ejecutivo}
+
+\begin{claudehero}
+\ClaudeLead{Escribe aquí la lectura de la jornada: el estado general, el movimiento más importante, la decisión que cambia el plan y la evidencia disponible. Mantén el texto breve y verificable.}
+\end{claudehero}
+
+\section{Indicadores}
+
+\begin{tcbraster}[raster columns=4,raster equal height=rows,raster column skip=8pt]
+\KPICard{Salud}{Verde}{sin bloqueo crítico}
+\KPICard{Avance}{72\,\%}{incremento semanal}
+\KPICard{Riesgos}{2}{uno requiere dueño}
+\KPICard{Decisiones}{1}{ADR pendiente de firma}
+\end{tcbraster}
+
+\section{Decisión activa}
+
+\ClaudeDecisionRecord[Pendiente]
+  {ADR-001 · Título de la decisión}
+  {Describe el contexto que obliga a decidir.}
+  {Escribe la decisión concreta, en una frase que pueda auditarse.}
+  {Explica el coste, la consecuencia y el siguiente control.}
+
+\section{Riesgos}
+
+\begin{ClaudeTable}{@{}lL L l@{}}
+\ClaudeTableHeader Riesgo & Impacto & Mitigación & Estado \\
+\toprule
+\ClaudeRiskRow{R-001}{Riesgo técnico pendiente de validar.}{Añadir prueba reproducible y dueño.}{\StatusOpen}
+\ClaudeRiskRow{R-002}{Dependencia externa con fecha incierta.}{Definir alternativa manual temporal.}{\StatusWIP}
+\bottomrule
+\end{ClaudeTable}
+
+\section{Evidencia}
+
+\begin{ClaudeCode}[title={Comprobación reproducible}]{SQL}
+SELECT status, COUNT(*) AS total
+FROM project_events
+WHERE created_at >= CURRENT_DATE - 1
+GROUP BY status
+ORDER BY total DESC;
+\end{ClaudeCode}
+
+\begin{ClaudeOutput}
+Registra aquí la salida esperada, una captura textual o la conclusión verificable.
+\end{ClaudeOutput}
+
+\section{Referencias}
+
+El sistema de diseño sigue una disciplina de tokens cálidos y acento controlado, inspirada en reglas editoriales de productos de IA contemporáneos \parencite{claude-editorial-design-notes}.
+
+\printbibliography
+
+\ClaudeSignature{\DocAuthor}{\DocRole}
+
+\end{document}

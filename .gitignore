@@ -1,0 +1,68 @@
+# LaTeX build output
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.lof
+*.loe
+*.lol
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.vrb
+*.xdv
+_minted*/
+
+# Generated documents
+*.pdf
+*.ps
+*.dvi
+
+# Local backups and archives
+*.bak
+*.backup
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+
+# Local agent/editor state
+.claude/
+.codex/
+.agents/
+.cursor/
+.opencode/
+.task/
+task.md
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Build/cache folders from adjacent tooling
+node_modules/
+dist/
+build/
+out/
+.tmp/
+.cache/
+__pycache__/
+.pytest_cache/

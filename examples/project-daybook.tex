@@ -1,0 +1,107 @@
+\documentclass{claudeeditorial}
+
+\renewcommand{\DocKicker}{Manual de marcha}
+\renewcommand{\DocTitle}{Diario de ingeniería de proyectos}
+\renewcommand{\DocSubtitle}{Plantilla diaria para decisiones, riesgos, avances, arquitectura y seguimiento operativo}
+\renewcommand{\DocAuthor}{Equipo de proyecto}
+\renewcommand{\DocRole}{Project engineering}
+\renewcommand{\DocDate}{5 de mayo de 2026}
+\renewcommand{\DocRef}{DAYBOOK-001}
+\renewcommand{\DocFooter}{claudeeditorial project daybook}
+
+\renewcommand{\ProjectName}{Sistema de operaciones}
+\renewcommand{\ProjectPhase}{Ejecución}
+\renewcommand{\ProjectOwner}{Equipo de ingeniería}
+\renewcommand{\ProjectStatus}{En progreso}
+
+\ClaudeRunningHeader
+\setstretch{1.22}
+
+\begin{document}
+\BodyCopy
+
+\ClaudeCover
+
+\ClaudeChapterPage{01}{Nota diaria}{Una página de mando para que el equipo sepa qué cambió, qué se decidió y qué necesita atención.}
+
+\ClaudeProjectHeader
+  {\ProjectName}
+  {Seguimiento diario de ingeniería: estado, decisiones, riesgos, evidencias y siguiente movimiento.}
+  {\DocDate}
+  {\ProjectStatus}
+
+\begin{tcbraster}[raster columns=4,raster equal height=rows,raster column skip=8pt]
+\KPICard{Salud}{Verde}{entregables dentro de rango}
+\KPICard{Riesgos}{2}{uno técnico, uno operativo}
+\KPICard{Decisiones}{1}{arquitectura de integración}
+\KPICard{Bloqueos}{0}{sin dependencia externa crítica}
+\end{tcbraster}
+
+\section{Resumen ejecutivo}
+
+\begin{claudehero}
+\ClaudeLead{El proyecto avanza según el plan. La prioridad del día es cerrar el contrato de integración, dejar trazabilidad de la decisión técnica y preparar una validación reproducible para revisión de negocio.}
+\end{claudehero}
+
+\begin{ClaudeActionList}[Foco del día]
+\ClaudeActionItem{Contrato de integración}{due: hoy}{Congelar nombres de campos, tipos y semántica de errores.}
+\ClaudeActionItem{Validación reproducible}{due: 24 h}{Generar una consulta de humo y registrar salida esperada.}
+\ClaudeActionItem{Revisión de riesgos}{due: semanal}{Confirmar que las mitigaciones siguen teniendo propietario.}
+\end{ClaudeActionList}
+
+\section{Decisión}
+
+\ClaudeDecisionRecord[Activa]
+  {ADR-004 · Contrato único de eventos}
+  {Los equipos consumen eventos desde dos fuentes con campos casi equivalentes, pero con nombres y reglas de nulidad diferentes.}
+  {Se define un contrato canónico y se obliga a que cada adaptador traduzca al modelo común antes de publicar.}
+  {La complejidad queda en los bordes del sistema, mejora la observabilidad y se reduce el coste de soporte.}
+
+\section{Riesgos}
+
+\begin{ClaudeTable}{@{}lL L l@{}}
+\ClaudeTableHeader Riesgo & Impacto & Mitigación & Estado \\
+\toprule
+\ClaudeRiskRow{R-012}{Datos incompletos en origen secundario}{Validar nulos antes de publicar eventos.}{\StatusWIP}
+\ClaudeRiskRow{R-018}{Cambios de esquema sin aviso}{Añadir prueba de contrato en pipeline.}{\StatusOpen}
+\bottomrule
+\end{ClaudeTable}
+
+\section{Evidencia técnica}
+
+\begin{ClaudeCode}[title={Smoke test SQL}]{SQL}
+SELECT event_type, COUNT(*) AS total
+FROM ops.event_log
+WHERE created_at >= CURRENT_DATE - 1
+GROUP BY event_type
+ORDER BY total DESC;
+\end{ClaudeCode}
+
+\begin{ClaudeConsole}
+$ npm run contract:check
+contract:event-log  ok
+contract:payload    ok
+\end{ClaudeConsole}
+
+\section{Arquitectura}
+
+\begin{ClaudeDiagram}
+\centering
+\begin{tikzpicture}[claude diagram canvas,node distance=20mm]
+  \node[claude diagram node] (source) {Source};
+  \node[claude diagram node,right=of source] (adapter) {Adapter};
+  \node[claude diagram node,right=of adapter] (contract) {Canonical\\Contract};
+  \node[claude diagram node,right=of contract] (consumer) {Consumer};
+  \draw[claude uml relation] (source) -- (adapter);
+  \draw[claude uml relation] (adapter) -- (contract);
+  \draw[claude uml relation] (contract) -- (consumer);
+\end{tikzpicture}
+\end{ClaudeDiagram}
+
+\begin{ClaudeInfo}[Cierre]
+El documento diario debe ser breve. Si una decisión requiere más contexto, se abre un ADR completo y se enlaza desde esta página.
+\end{ClaudeInfo}
+
+\ClaudeSignature{\DocAuthor}{\DocRole}
+
+\end{document}

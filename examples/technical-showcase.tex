@@ -1,0 +1,164 @@
+\documentclass{claudeeditorial}
+
+\renewcommand{\DocKicker}{Technical Showcase}
+\renewcommand{\DocTitle}{Documentación técnica editorial}
+\renewcommand{\DocSubtitle}{Código, SQL, tablas, notas laterales y diagramas con una estética cálida y reproducible}
+\renewcommand{\DocAuthor}{Equipo de documentación}
+\renewcommand{\DocRole}{Plantilla pública}
+\renewcommand{\DocDate}{5 de mayo de 2026}
+\renewcommand{\DocRef}{TECH-001}
+\renewcommand{\DocFooter}{claudeeditorial technical showcase}
+
+\hypersetup{
+  pdftitle={Claude Editorial Technical Showcase},
+  pdfauthor={Equipo de documentación}
+}
+
+\ClaudeRunningHeader
+\setstretch{1.2}
+
+\begin{document}
+\BodyCopy
+
+\ClaudeCover
+
+\ClaudeBanner[pulseDecision]{Código, datos y arquitectura en un mismo sistema visual}
+
+\begin{tcbraster}[raster columns=3,raster equal height=rows,raster column skip=8pt]
+  \KPICard{Código}{12+}{lenguajes frecuentes}
+  \KPICard{Diagramas}{UML/ER}{TikZ nativo}
+  \KPICard{Pandoc}{Ready}{tokens Highlighting}
+\end{tcbraster}
+
+\section{Bloques semánticos}
+
+\ClaudeMarginInfo[Nota lateral]{Las notas marginales son compactas; funcionan mejor con una o dos frases.}
+
+\begin{ClaudeInfo}[Contexto]
+Este documento muestra piezas técnicas neutras. La clase evita depender de paquetes UML/ER externos y ofrece estilos TikZ propios para mantener una licencia permisiva.
+\end{ClaudeInfo}
+
+\begin{ClaudeTip}[Criterio editorial]
+Usa cajas semánticas para explicar intención: información, advertencia, validación, pregunta o riesgo. No las uses como decoración.
+\end{ClaudeTip}
+
+\begin{tcbraster}[raster columns=2,raster equal height=rows,raster column skip=10pt]
+\begin{ClaudeWarning}[Riesgo de maquetación]
+Los listados largos deben partir líneas y reservar espacio suficiente a la numeración.
+\end{ClaudeWarning}
+
+\begin{ClaudeCheck}[Validación]
+Las tablas técnicas usan color alterno, cabeceras cálidas y reglas suaves.
+\end{ClaudeCheck}
+\end{tcbraster}
+
+\section{Código}
+
+\begin{ClaudeCode}[title={Consulta SQL con alias y ordenación}]{SQL}
+SELECT
+  customer_id,
+  COUNT(*) AS order_count,
+  SUM(total_amount) AS total_revenue
+FROM analytics.orders
+WHERE status = 'paid'
+GROUP BY customer_id
+HAVING SUM(total_amount) > 1000
+ORDER BY total_revenue DESC;
+\end{ClaudeCode}
+
+\begin{ClaudeCode}[title={Servicio TypeScript}]{TypeScript}
+type Decision = {
+  id: string;
+  confidence: number;
+  accepted: boolean;
+};
+
+export function selectDecision(items: Decision[]): Decision | undefined {
+  return items
+    .filter((item) => item.accepted)
+    .sort((a, b) => b.confidence - a.confidence)[0];
+}
+\end{ClaudeCode}
+
+\begin{ClaudeCode}[title={Clases Java}]{Java}
+interface Humano {
+  void identificate();
+}
+
+class Persona implements Humano {
+  private String nombre;
+
+  @Override
+  public void identificate() {
+    System.out.println("Persona: " + nombre);
+  }
+}
+\end{ClaudeCode}
+
+\begin{ClaudeCode}[title={Modelo C\#}]{CSharp}
+public abstract class Volumen
+{
+    public string Nombre { get; set; }
+    public int Numero { get; set; }
+
+    public abstract void Mostrar();
+}
+\end{ClaudeCode}
+
+\begin{ClaudeConsole}
+$ xelatex template.tex
+Output written on template.pdf
+\end{ClaudeConsole}
+
+\section{Tablas}
+
+\begin{ClaudeTable}{@{}lLr@{}}
+\ClaudeTableHeader
+Elemento & Uso recomendado & Prioridad \\
+\toprule
+Portada & Presentar título, subtítulo y metadatos con aire editorial. & 1 \\
+Info box & Explicar contexto sin interrumpir el flujo principal. & 2 \\
+Diagrama & Mostrar estructura cuando el texto se vuelve demasiado lineal. & 1 \\
+Código & Documentar implementación, consulta o salida reproducible. & 1 \\
+\bottomrule
+\end{ClaudeTable}
+
+\section{Diagramas}
+
+\begin{ClaudeDiagram}
+\centering
+\begin{tikzpicture}[claude diagram canvas,node distance=22mm]
+  \ClaudeUMLInterface{Repository}{}{+ find(id) : Entity\\+ save(entity) : void}
+  \ClaudeUMLClass[right=of Repository]{Service}
+    {- repository : Repository}
+    {+ execute(command) : Result\\- validate(command) : bool}
+  \ClaudeUMLClass[right=of Service]{Controller}
+    {- service : Service}
+    {+ handle(request) : Response}
+  \ClaudeUMLRelation[claude uml dependency]{Service}{Repository}[uses]
+  \ClaudeUMLRelation[claude uml relation]{Controller}{Service}[calls]
+\end{tikzpicture}
+\end{ClaudeDiagram}
+
+\begin{ClaudeDiagram}
+\centering
+\begin{tikzpicture}[claude diagram canvas,node distance=18mm]
+  \ClaudeEREntity{customer}{Customer}
+  \ClaudeERAttribute[above left=of customer]{customer_id}{\ClaudeKey{id}}
+  \ClaudeERAttribute[above right=of customer]{customer_name}{name}
+  \ClaudeERRelationship[right=of customer]{places}{places}
+  \ClaudeEREntity[right=of places]{order}{Order}
+  \ClaudeERAttribute[above=of order]{order_id}{\ClaudeKey{id}}
+  \ClaudeERAttribute[below=of order]{order_total}{total}
+  \ClaudeEROneToMany{customer}{places}[1..N]
+  \ClaudeERManyToOne{places}{order}[N..1]
+  \ClaudeERLink{customer_id}{customer}
+  \ClaudeERLink{customer_name}{customer}
+  \ClaudeERLink{order_id}{order}
+  \ClaudeERLink{order_total}{order}
+\end{tikzpicture}
+\end{ClaudeDiagram}
+
+\ClaudeSignature{\DocAuthor}{\DocRole}
+
+\end{document}

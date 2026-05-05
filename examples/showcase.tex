@@ -1,0 +1,205 @@
+\documentclass{claudeeditorial}
+
+\renewcommand{\DocKicker}{Showcase}
+\renewcommand{\DocTitle}{Claude Editorial LaTeX}
+\renewcommand{\DocSubtitle}{Catálogo visual de componentes para documentos cálidos, densos y legibles}
+\renewcommand{\DocAuthor}{Equipo de documentación}
+\renewcommand{\DocRole}{Sistema editorial}
+\renewcommand{\DocDate}{5 de mayo de 2026}
+\renewcommand{\DocRef}{SHOWCASE-001}
+\renewcommand{\DocFooter}{claudeeditorial showcase}
+
+\renewcommand{\InterviewQuestionLabel}{Pregunta}
+\renewcommand{\InterviewAnswerLabel}{Respuesta}
+
+\hypersetup{
+  pdftitle={Claude Editorial LaTeX Showcase},
+  pdfauthor={Equipo de documentación}
+}
+
+\fancyhead[L]{\UIFont\footnotesize\color{claudeWarmText}\DocKicker}
+\fancyhead[R]{\UIFont\footnotesize\color{claudeStone}\DocRef}
+
+\titleformat{\section}
+  {\DisplayFont\Large\bfseries\color{claudeInk}}{}
+  {0pt}{}[\vspace{0.38em}{\color{claudeBorder}\titlerule}]
+\titlespacing*{\section}{0pt}{1.4em}{0.6em}
+
+\setstretch{1.22}
+
+\begin{document}
+\BodyCopy
+\CornerRibbon[claudeTerracotta]{Demo}
+
+{\small\UIFont\color{claudeTerracotta}\DocKicker}\par\vspace{0.2em}
+{\fontsize{31}{35}\selectfont\DisplayFont\color{claudeInk}\DocTitle\par}
+\vspace{0.2em}
+{\normalsize\UIFont\color{claudeWarmText}\DocSubtitle\par}
+\vspace{0.45em}
+{\UIFont\small\color{claudeStone}\DocAuthor\hspace{1em}\textperiodcentered\hspace{1em}\DocRole\hspace{1em}\textperiodcentered\hspace{1em}\DocDate\par}
+
+\vspace{0.45em}
+\ClaudeBadge{Claude-inspired}
+\hspace{0.35em}\ClaudeBadge[claudeForest]{Warm editorial}
+\hspace{0.35em}\ClaudeBadge[claudeWarmText]{LaTeX class}
+\hspace{0.35em}\ClaudeBadge[claudeGold]{PDF-ready}
+
+\vspace{0.55em}
+\OrnamentRule
+
+\begin{claudehero}
+\ClaudeLead{Esta clase traslada a LaTeX un lenguaje visual de interfaz: tokens de color tipo CSS, superficies cálidas, bordes suaves, jerarquía serif/sans y componentes reutilizables para componer documentos de trabajo con presencia editorial.}
+\end{claudehero}
+
+\section{Métricas y tarjetas}
+
+\begin{tcbraster}[raster columns=2,raster equal height=rows,raster column skip=10pt,
+  enhanced,colback=claudeIvory,colframe=claudeBorderSoft,boxrule=0pt]
+\BigStat[\IconArrow[pulseOK]\,+18\,\%]{Lectura}{64\,pp}{Documento largo con ritmo de revista técnica.}
+\BigStat[\IconArrow[claudeStone]\,estable]{Sistema}{20+}{Macros y entornos listos para recombinar.}
+\end{tcbraster}
+
+\vspace{0.6em}
+
+\begin{tcbraster}[raster columns=4,raster equal height=rows,raster column skip=8pt,
+  enhanced,colback=claudeIvory,colframe=claudeBorderSoft,boxrule=0pt]
+\KPICard{Lead}{1 página}{resumen}
+\KPICard{Color}{12 tokens}{paleta}
+\KPICard{Cajas}{10+}{tcolorbox}
+\KPICard{Salida}{PDF}{xelatex}
+\end{tcbraster}
+
+\section{Iconos, severidad y etiquetas}
+
+\begin{tabularx}{\linewidth}{@{}>{\UIFont\small\bfseries\color{claudeInk}}p{0.18\linewidth}Y@{}}
+\toprule
+{\color{claudeStone}\small Icono} & {\color{claudeStone}\small Uso recomendado} \\
+\midrule
+\IconCheck\ check & operación completada, evidencia validada o condición satisfecha \\
+\IconCross\ cross & riesgo confirmado, claim no sostenible o condición incumplida \\
+\IconWarn\ warning & atención requerida, revisión pendiente o cambio sensible \\
+\IconArrow\ arrow & transición, flujo, siguiente paso o movimiento \\
+\IconStar\ star & prioridad alta, nota destacada o criterio clave \\
+\IconInfo\ info & explicación auxiliar o contexto adicional \\
+\IconLock\ lock & contenido restringido, privado o sujeto a revisión \\
+\IconDot\ dot & marcador simple de lista o punto de control \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.7em}
+\SevCritical{bloqueante}\quad
+\SevHigh{alto impacto}\quad
+\SevMedium{revisar}\quad
+\SevLow{menor}\quad
+\SevInfo{contexto}
+
+\vspace{0.7em}
+\Tag{LaTeX}\ \Tag[pulseIdentidad]{XeLaTeX}\ \Tag[pulseConformal]{Editorial}\ \Tag[claudeTerracotta]{Claude-like}\ \Tag[claudeForest]{Open template}
+
+\section{Citas y glosario}
+
+\begin{PressQuote}[Principio de diseño]
+Un documento no debería parecer una interfaz pegada en papel. La traducción correcta es conservar la jerarquía, la temperatura visual y la economía de acentos, pero dejar que LaTeX haga lo que sabe hacer: composición tipográfica.
+\end{PressQuote}
+
+\DefnEntry{Token visual}{Valor reusable de color, espaciado o jerarquía que mantiene consistencia entre piezas.}
+\DefnEntry{Superficie}{Caja o banda que agrupa contenido sin convertir toda la página en una colección de tarjetas.}
+\DefnEntry{Acento}{Uso limitado de terracota para navegación visual, decisión o énfasis semántico.}
+\DefnEntry{Cadencia editorial}{Alternancia de texto, respiración, tablas, citas y bloques para que el lector no se fatigue.}
+
+\section{Comparación}
+
+\begin{Comparison}{}{}
+\CompCol{Antes}{%
+\IconCross\ Documento gris, sin jerarquía.\par
+\IconCross\ Tablas densas sin ritmo.\par
+\IconCross\ Acentos usados como decoración.\par
+\IconCross\ Portada desconectada del resto.}
+\CompCol{Después}{%
+\IconCheck\ Sistema de color coherente.\par
+\IconCheck\ Componentes con función clara.\par
+\IconCheck\ Acento reservado para sentido.\par
+\IconCheck\ Portada, desarrollo y cierre unidos.}
+\end{Comparison}
+
+\clearpage
+
+\SectionOpener{01}{Bloques editoriales}{Cajas, notas y decisiones}
+
+\begin{tcbraster}[raster columns=2,raster equal height=rows,raster column skip=10pt]
+\begin{claudenote}
+\textbf{\UIFont Nota editorial.}
+
+Sirve para contexto, antecedentes, matices o avisos suaves.
+\end{claudenote}
+
+\begin{claudequote}
+\textbf{\UIFont Idea central.}
+
+\itshape La sensación debe ser cálida y precisa: suficiente aire, poco ruido y un acento reconocible.
+\end{claudequote}
+
+\begin{claudedecision}{Decisión}
+Bloque para conclusiones, criterios o recomendaciones. Tiene mayor peso visual y conviene usarlo con moderación.
+\end{claudedecision}
+
+\begin{claudechecklist}{Checklist}
+\begin{itemize}
+\item mantener títulos breves;
+\item reservar terracota para énfasis real;
+\item evitar cajas innecesarias;
+\item revisar saltos de página.
+\end{itemize}
+\end{claudechecklist}
+\end{tcbraster}
+
+\SectionOpener{02}{Panel oscuro}{Cambio de atmósfera}
+
+\begin{claudedarkpanel}{Resumen de alto peso}
+{\DisplayFont\fontsize{23}{27}\selectfont\color{claudeIvory}Un documento largo necesita cambios de ritmo.\par}
+
+\vspace{0.5em}
+{\color{claudeWarmSilver}Este panel funciona para manifiestos breves, aperturas de capítulo, resúmenes ejecutivos densos o secciones que necesitan más gravedad visual.}
+
+\vspace{0.8em}
+\ClaudeBadge[claudeWarmSilver]{dark panel}
+\hspace{0.35em}\ClaudeBadge[claudeWarmSilver]{chapter opener}
+\hspace{0.35em}\ClaudeBadge[claudeWarmSilver]{high contrast}
+\end{claudedarkpanel}
+
+\SectionOpener{03}{Teoremas y pruebas}{Documentos técnicos con tono editorial}
+
+\begin{definicion}[Componente editorial]
+Un componente editorial es una unidad composable que combina función semántica, jerarquía visual y espaciado reproducible.
+\end{definicion}
+
+\begin{teorema}[Consistencia de tokens]
+Si todos los componentes consumen la misma paleta y las mismas reglas de jerarquía, el documento conserva identidad visual aunque cambie de estructura.
+\end{teorema}
+
+\begin{claudeproof}
+\textbf{Demostración (esbozo).} Las cajas, badges, tablas e iconos dependen de los mismos nombres de color y del mismo par tipográfico. Al variar el contenido, la relación visual permanece acotada por esos tokens. \qed
+\end{claudeproof}
+
+\SectionOpener{04}{Entrevista}{Formato pregunta-respuesta}
+
+\EntrevistaQ{¿Cuándo conviene usar esta clase en vez de una plantilla corporativa convencional?}
+\EntrevistaA{Cuando el documento necesita parecer cuidado, legible y con identidad editorial, pero no debe convertirse en una landing page ni en una presentación.}
+
+\SectionOpener{05}{Aperturas y cierre}{ChapterMark, DropCap y firma}
+
+\ChapterMark{I}{Del documento como interfaz tranquila}
+
+\DropCap{U}{na plantilla editorial no intenta decorar cada párrafo. Su trabajo es marcar rutas de lectura: dónde empieza una idea, qué merece atención y qué decisión debe recordarse al final.}
+
+\begin{claudeepigraph}
+El buen diseño documental deja que el contenido parezca inevitable.
+\end{claudeepigraph}
+
+\begin{claudedecision}{Criterio de cierre}
+Usa menos piezas de las disponibles. La clase es completa para que puedas elegir, no para que todo aparezca en cada documento.
+\end{claudedecision}
+
+\ClaudeSignature{\DocAuthor}{\DocRole}
+
+\end{document}

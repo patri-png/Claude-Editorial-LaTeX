@@ -1,0 +1,494 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{fontspec}
+\usepackage[spanish]{babel}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{ragged2e}
+\usepackage{xparse}
+
+\tcbuselibrary{skins,breakable,raster}
+
+% Tipografias libres y faciles de conseguir en distribuciones TeX
+\setmainfont{TeX Gyre Pagella}
+\setsansfont{TeX Gyre Heros}
+\setmonofont{Latin Modern Mono}
+
+% Paleta inspirada en Claude / Anthropic
+\definecolor{claudeParchment}{HTML}{F5F4ED}
+\definecolor{claudeIvory}{HTML}{FAF9F5}
+\definecolor{claudeTerracotta}{HTML}{C96442}
+\definecolor{claudeCoral}{HTML}{D97757}
+\definecolor{claudeInk}{HTML}{141413}
+\definecolor{claudeCharcoal}{HTML}{30302E}
+\definecolor{claudeWarmText}{HTML}{4D4C48}
+\definecolor{claudeOliveGray}{HTML}{5E5D59}
+\definecolor{claudeStone}{HTML}{87867F}
+\definecolor{claudeBorder}{HTML}{E8E6DC}
+\definecolor{claudeBorderSoft}{HTML}{F0EEE6}
+\definecolor{claudeWarmSilver}{HTML}{B0AEA5}
+\definecolor{claudeForest}{HTML}{5A6E63}
+\definecolor{claudeError}{HTML}{B53333}
+
+\pagecolor{claudeParchment}
+\color{claudeOliveGray}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=claudeTerracotta,
+  urlcolor=claudeTerracotta,
+  citecolor=claudeTerracotta,
+  pdfborder={0 0 0}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.78em}
+\setstretch{1.28}
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.35em,topsep=0.3em}
+\setlist[enumerate]{leftmargin=1.6em,itemsep=0.35em,topsep=0.3em}
+\setlength{\headheight}{18pt}
+\setlength{\tabcolsep}{6pt}
+\emergencystretch=2em
+
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+
+% Metadatos editables
+\newcommand{\DocKicker}{Editorial Template}
+\newcommand{\DocTitle}{Plantilla editorial inspirada en Claude}
+\newcommand{\DocSubtitle}{Sistema reusable para informes, propuestas, memorandos y documentos largos con tono cálido y sereno}
+\newcommand{\DocAuthor}{Tu Nombre}
+\newcommand{\DocRole}{Dirección de diseño / redacción}
+\newcommand{\DocDate}{4 de mayo de 2026}
+\newcommand{\DocRef}{Ref. CLAUDE-LATEX-002}
+\newcommand{\DocFooter}{Claude Editorial LaTeX Template}
+
+\newcommand{\BodyCopy}{\color{claudeOliveGray}}
+\newcommand{\DisplayFont}{\rmfamily}
+\newcommand{\UIFont}{\sffamily}
+
+% Estilo de secciones
+\titleformat{\section}
+  {\DisplayFont\Large\bfseries\color{claudeInk}}
+  {}
+  {0pt}
+  {}
+  [\vspace{0.38em}{\color{claudeBorder}\titlerule}]
+
+\titleformat{\subsection}
+  {\DisplayFont\large\bfseries\color{claudeWarmText}}
+  {}
+  {0pt}
+  {}
+
+\titlespacing*{\section}{0pt}{1.8em}{0.8em}
+\titlespacing*{\subsection}{0pt}{1.1em}{0.45em}
+
+% Cabecera y pie
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\UIFont\footnotesize\color{claudeWarmText}\DocKicker}
+\fancyhead[R]{\UIFont\footnotesize\color{claudeStone}\DocRef}
+\fancyfoot[L]{\UIFont\footnotesize\color{claudeStone}\DocFooter}
+\fancyfoot[R]{\UIFont\footnotesize\color{claudeTerracotta}\thepage/\pageref{LastPage}}
+
+% Base para cajas
+\tcbset{
+  enhanced,
+  boxrule=0.6pt,
+  colback=claudeIvory,
+  colframe=claudeBorder,
+  arc=3mm,
+  left=10pt,
+  right=10pt,
+  top=8pt,
+  bottom=8pt
+}
+
+\newtcolorbox{claudehero}{
+  breakable,
+  colback=claudeIvory,
+  colframe=claudeBorderSoft,
+  boxrule=0.8pt,
+  arc=4mm,
+  left=14pt,
+  right=14pt,
+  top=14pt,
+  bottom=14pt,
+  borderline west={2pt}{0pt}{claudeTerracotta},
+  coltext=claudeWarmText
+}
+
+\newtcolorbox{claudenote}{
+  breakable,
+  colback=claudeIvory,
+  colframe=claudeBorder,
+  borderline west={1.6pt}{0pt}{claudeTerracotta},
+  coltext=claudeWarmText
+}
+
+\newtcolorbox{claudequote}{
+  breakable,
+  colback=claudeIvory,
+  colframe=claudeBorderSoft,
+  borderline west={1.6pt}{0pt}{claudeCoral},
+  coltext=claudeInk
+}
+
+\newtcolorbox{claudecard}{
+  breakable,
+  colback=claudeIvory,
+  colframe=claudeBorder,
+  coltext=claudeWarmText
+}
+
+\newtcolorbox{claudeaside}[1]{
+  breakable,
+  colback=claudeIvory,
+  colframe=claudeBorder,
+  title=\UIFont\bfseries\color{claudeInk}#1,
+  coltitle=claudeInk,
+  coltext=claudeWarmText
+}
+
+\newtcolorbox{claudecallout}[1]{
+  breakable,
+  colback=claudeIvory,
+  colframe=claudeBorder,
+  title=\UIFont\bfseries\color{claudeInk}#1,
+  coltitle=claudeInk,
+  coltext=claudeInk
+}
+
+\newtcolorbox{claudedecision}[1]{
+  breakable,
+  colback=claudeIvory,
+  colframe=claudeTerracotta,
+  boxrule=0.8pt,
+  title=\UIFont\bfseries\color{claudeInk}#1,
+  coltitle=claudeInk,
+  coltext=claudeWarmText,
+  borderline west={2pt}{0pt}{claudeTerracotta}
+}
+
+\newtcolorbox{claudechecklist}[1]{
+  breakable,
+  colback=claudeIvory,
+  colframe=claudeBorderSoft,
+  title=\UIFont\bfseries\color{claudeInk}#1,
+  coltitle=claudeInk,
+  coltext=claudeWarmText,
+  borderline west={2pt}{0pt}{claudeForest}
+}
+
+\newtcolorbox{claudedarkpanel}[1]{
+  breakable,
+  colback=claudeInk,
+  colframe=claudeCharcoal,
+  boxrule=0.6pt,
+  arc=4mm,
+  title=\UIFont\bfseries\color{claudeIvory}#1,
+  coltitle=claudeIvory,
+  coltext=claudeWarmSilver,
+  left=14pt,
+  right=14pt,
+  top=14pt,
+  bottom=14pt
+}
+
+\newcommand{\ClaudeRule}{\par\noindent{\color{claudeBorder}\rule{\textwidth}{0.6pt}}\par}
+\newcommand{\ClaudeSubtleRule}{\par\noindent{\color{claudeBorderSoft}\rule{\textwidth}{0.4pt}}\par}
+
+\NewDocumentCommand{\ClaudeBadge}{O{claudeTerracotta} m}{%
+  \tcbox[
+    on line,
+    colback=claudeIvory,
+    colframe=claudeBorderSoft,
+    boxrule=0.5pt,
+    arc=2.5mm,
+    left=6pt,
+    right=6pt,
+    top=3pt,
+    bottom=3pt
+  ]{\UIFont\scriptsize\color{#1}#2}%
+}
+
+\NewDocumentCommand{\ClaudeLead}{m}{%
+  {\fontsize{13.4}{20}\selectfont\color{claudeWarmText}#1\par}%
+}
+
+\NewDocumentCommand{\ClaudeStat}{m m m}{%
+  \begin{tcolorbox}[
+    colback=claudeIvory,
+    colframe=claudeBorderSoft,
+    boxrule=0.6pt,
+    arc=3mm,
+    left=10pt,
+    right=10pt,
+    top=10pt,
+    bottom=10pt
+  ]
+  {\UIFont\scriptsize\color{claudeStone}#1\par}
+  \vspace{0.25em}
+  {\DisplayFont\fontsize{23}{26}\selectfont\color{claudeInk}#2\par}
+  \vspace{0.25em}
+  {\small\color{claudeWarmText}#3\par}
+  \end{tcolorbox}%
+}
+
+\NewDocumentCommand{\ClaudeFact}{m m}{%
+  {\UIFont\scriptsize\color{claudeStone}#1\par}
+  {\DisplayFont\normalsize\color{claudeInk}#2\par}
+  \vspace{0.7em}
+}
+
+\NewDocumentCommand{\ClaudeTimelineItem}{m m m}{%
+  \begin{tabularx}{\textwidth}{@{}p{0.2\textwidth}@{\hspace{1em}}Y@{}}
+    {\UIFont\small\color{claudeStone}#1} &
+    {\DisplayFont\normalsize\bfseries\color{claudeInk}#2\par
+    {\small\color{claudeWarmText}#3}}
+  \end{tabularx}
+}
+
+\NewDocumentCommand{\ClaudeSignature}{m m}{%
+  \vspace{1.5em}
+  {\color{claudeBorder}\rule{48mm}{0.5pt}\par}
+  \vspace{0.7em}
+  {\DisplayFont\large\color{claudeInk}#1\par}
+  {\UIFont\small\color{claudeStone}#2\par}
+}
+
+\begin{document}
+\BodyCopy
+
+{\small\UIFont\color{claudeTerracotta}\DocKicker}
+
+{\fontsize{31}{35}\selectfont\DisplayFont\color{claudeInk}\DocTitle\par}
+
+{\large\UIFont\color{claudeWarmText}\DocSubtitle\par}
+
+\vspace{0.65em}
+
+{\UIFont\small\color{claudeStone}\DocAuthor\hspace{1em}·\hspace{1em}\DocRole\hspace{1em}·\hspace{1em}\DocDate\par}
+
+\vspace{0.8em}
+\ClaudeBadge{Claude-inspired}
+\hspace{0.35em}\ClaudeBadge[claudeForest]{Warm editorial}
+\hspace{0.35em}\ClaudeBadge[claudeWarmText]{Reusable system}
+
+\vspace{0.55em}
+\ClaudeRule
+\vspace{0.45em}
+
+\begin{claudehero}
+\ClaudeLead{Esta plantilla ya no funciona como una simple página de ejemplo. Está planteada como un sistema editorial reusable con suficientes piezas para componer documentos reales: informes, memorandos, propuestas, notas estratégicas, resúmenes ejecutivos y textos largos con un tono más humano y más deliberado.}
+
+{\UIFont\small\color{claudeStone}La referencia visual principal es \texttt{design-systems/claude/DESIGN.md}, reforzada con el criterio de \texttt{design-systems/warm-editorial/DESIGN.md}.}
+\end{claudehero}
+
+\vspace{0.85em}
+
+\begin{tcbraster}[
+  raster columns=3,
+  raster equal height=rows,
+  raster column skip=8pt,
+  raster before skip=0pt,
+  raster after skip=0pt
+]
+\ClaudeStat{Jerarquía}{Serif + sans}{Titulares con cadencia editorial y metadatos en una sans funcional y discreta.}
+\ClaudeStat{Color}{Terracotta + warm neutrals}{Un acento medido sobre pergamino cálido y grises con subtono orgánico.}
+\ClaudeStat{Componentes}{Más piezas disponibles}{Portada, notas, decisiones, checklist, comparativas, cronología, bloque oscuro y cierre.}
+\end{tcbraster}
+
+\section{Qué incluye esta plantilla}
+
+\ClaudeLead{La idea no es copiar una interfaz, sino trasladar a documento el lenguaje visual de Claude: calma, lectura pausada, serif con gravedad, bordes suaves y contraste sin frialdad tecnológica.}
+
+\begin{minipage}[t]{0.62\textwidth}
+Esta versión está pensada para que reutilices más de una capa de diseño al mismo tiempo: la portada,
+los resúmenes, los módulos laterales, las tablas comparativas, las métricas y los cortes de atmósfera.
+No tienes por qué usarlo todo en cada documento; la gracia está en que ya existe una pequeña biblioteca
+de piezas y no una única maqueta cerrada.
+
+\begin{claudenote}
+\UIFont\small
+\textbf{\color{claudeInk}Resumen ejecutivo.}
+Si la primera versión era una buena prueba de tono, esta ya sirve como base de trabajo real:
+puedes mezclar módulos sin que el documento pierda consistencia.
+\end{claudenote}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.34\textwidth}
+\begin{claudeaside}{Tokens rápidos}
+\ClaudeFact{Fondo}{Parchment \#F5F4ED}
+\ClaudeFact{Superficie}{Ivory \#FAF9F5}
+\ClaudeFact{Acento}{Terracotta \#C96442}
+\ClaudeFact{Texto}{Ink \#141413}
+\ClaudeFact{Secundario}{Olive Gray \#5E5D59}
+\ClaudeFact{Borde}{Warm Border \#E8E6DC}
+\end{claudeaside}
+\end{minipage}
+
+\section{Piezas disponibles}
+
+\begin{claudecallout}{Inventario de componentes}
+\ClaudeBadge{Portada editorial}
+\hspace{0.3em}\ClaudeBadge[claudeForest]{Resumen ejecutivo}
+\hspace{0.3em}\ClaudeBadge[claudeWarmText]{Métricas}
+\hspace{0.3em}\ClaudeBadge{Nota}
+\hspace{0.3em}\ClaudeBadge[claudeTerracotta]{Decisión}
+\hspace{0.3em}\ClaudeBadge[claudeForest]{Checklist}
+\hspace{0.3em}\ClaudeBadge[claudeWarmText]{Tabla comparativa}
+\hspace{0.3em}\ClaudeBadge{Línea temporal}
+\hspace{0.3em}\ClaudeBadge[claudeForest]{Bloque oscuro}
+\hspace{0.3em}\ClaudeBadge[claudeWarmText]{Firma / cierre}
+
+\vspace{0.8em}
+\begin{itemize}
+\item informes breves con presencia visual;
+\item propuestas narrativas con datos puntuales;
+\item documentación institucional menos rígida;
+\item textos largos con cambios de ritmo entre secciones.
+\end{itemize}
+\end{claudecallout}
+
+\clearpage
+
+\section{Bloques editoriales}
+
+\ClaudeLead{Aquí es donde la plantilla se vuelve útil de verdad: no solo hay estilo, hay piezas con función clara.}
+
+\begin{tcbraster}[
+  raster columns=2,
+  raster equal height=rows,
+  raster column skip=10pt,
+  raster before skip=0pt,
+  raster after skip=0pt
+]
+\begin{claudenote}
+\textbf{\sffamily Nota editorial.}
+
+Úsala para añadir contexto, antecedentes, aclaraciones o marco conceptual.
+\end{claudenote}
+
+\begin{claudequote}
+\textbf{\sffamily Cita o idea central.}
+
+\itshape
+La sensación general debe ser la de una página bien editada: cálida, serena, precisa y con suficiente aire para que el contenido respire.
+\end{claudequote}
+
+\begin{claudedecision}{Decisión / recomendación}
+Este bloque sirve para fijar postura, aprobación, criterio o conclusión. Tiene más peso visual y por eso conviene reservarlo para decisiones de verdad.
+\end{claudedecision}
+
+\begin{claudechecklist}{Checklist de uso}
+\begin{itemize}
+\item dejar respirar el papel;
+\item usar el terracota con moderación;
+\item mantener la serif para los momentos de autoridad;
+\item usar la sans solo donde aporta claridad funcional.
+\end{itemize}
+\end{claudechecklist}
+\end{tcbraster}
+
+\section{Comparativas y evidencia}
+
+\begin{claudecallout}{Matriz de composición}
+\begingroup
+\arrayrulecolor{claudeBorder}
+\begin{tabularx}{\textwidth}{@{}>{\DisplayFont\color{claudeInk}}lYYY@{}}
+\toprule
+{\color{claudeWarmText}Pieza} & {\color{claudeWarmText}Función} & {\color{claudeWarmText}Tono} & {\color{claudeWarmText}Uso recomendado} \\
+\midrule
+Portada & Abrir el documento & Editorial y sereno & Informes, propuestas, notas con entidad propia \\
+Nota & Dar contexto breve & Calmado y auxiliar & Avisos, marco legal, matices, antecedentes \\
+Decisión & Fijar postura & Firme y visible & Acuerdos, directrices, recomendaciones \\
+Bloque oscuro & Cambiar la atmósfera & Más denso y dramático & Capítulos, manifiestos, resúmenes de alto peso \\
+Cronología & Ordenar hitos & Claro y narrativo & Planes de fase, evolución, fases de proyecto \\
+\bottomrule
+\end{tabularx}
+\endgroup
+\end{claudecallout}
+
+\section{Línea temporal}
+
+\begin{claudecard}
+\ClaudeTimelineItem{Semana 1}{Definición visual}{Ajustar la portada, la jerarquía tipográfica y el contraste general del documento.}
+\vspace{0.8em}
+\ClaudeSubtleRule
+\vspace{0.8em}
+\ClaudeTimelineItem{Semana 2}{Sistema de componentes}{Añadir cajas reutilizables, métricas, tablas, bloques laterales y módulos de decisión.}
+\vspace{0.8em}
+\ClaudeSubtleRule
+\vspace{0.8em}
+\ClaudeTimelineItem{Semana 3}{Composición avanzada}{Introducir patrones de dos columnas, cortes oscuros y páginas con más ritmo editorial.}
+\vspace{0.8em}
+\ClaudeSubtleRule
+\vspace{0.8em}
+\ClaudeTimelineItem{Semana 4}{Producción real}{Aplicar la plantilla a documentos concretos y consolidar variantes según caso de uso.}
+\end{claudecard}
+
+\clearpage
+
+\begin{claudedarkpanel}{Sección oscura opcional}
+{\DisplayFont\fontsize{24}{28}\selectfont\color{claudeIvory}Un documento largo también necesita cambios de atmósfera.\par}
+
+\vspace{0.5em}
+{\color{claudeWarmSilver}Este módulo sirve para aperturas de capítulo, manifiestos breves, resúmenes de alto nivel o páginas donde interese concentrar más peso visual sin abandonar el sistema Claude.}
+
+\vspace{0.9em}
+\ClaudeBadge[claudeWarmSilver]{Dark section}
+\hspace{0.35em}\ClaudeBadge[claudeWarmSilver]{Chapter opener}
+\hspace{0.35em}\ClaudeBadge[claudeWarmSilver]{High-contrast pause}
+\end{claudedarkpanel}
+
+\section{Patrones de composición}
+
+\ClaudeLead{Además de las piezas sueltas, ya hay suficientes bloques como para repetir patrones de página según el tipo de documento.}
+
+\begin{tcbraster}[
+  raster columns=3,
+  raster equal height=rows,
+  raster column skip=8pt,
+  raster before skip=0pt,
+  raster after skip=0pt
+]
+\begin{claudeaside}{Apertura}
+Titular, subtítulo, metadatos, badges y resumen ejecutivo en una primera página que respira.
+\end{claudeaside}
+
+\begin{claudeaside}{Desarrollo}
+Secciones con una idea principal, una cita, una tabla puntual o un módulo lateral para no caer en monotonía.
+\end{claudeaside}
+
+\begin{claudeaside}{Cierre}
+Decisión, próximos pasos, firma y, si conviene, una última llamada de tono institucional.
+\end{claudeaside}
+\end{tcbraster}
+
+\section{Cierre}
+
+Si vas a reutilizar esta plantilla, no hace falta que conserves el ejemplo completo. Puedes tomar solo las piezas que te interesen: portada + nota para un memo breve, o portada + comparativa + cronología + decisión para un informe más estructurado.
+
+\begin{claudedecision}{Próximo paso recomendado}
+El siguiente paso natural sería separar esto en dos archivos:
+\texttt{claude-editorial-base.tex} para la estructura reusable y
+\texttt{claude-editorial-demo.tex} para este catálogo visual de componentes.
+\end{claudedecision}
+
+\ClaudeSignature{\DocAuthor}{\DocRole}
+
+\end{document}

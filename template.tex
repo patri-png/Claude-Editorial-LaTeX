@@ -1,0 +1,58 @@
+\documentclass{claudeeditorial}
+
+\renewcommand{\DocKicker}{Plantilla}
+\renewcommand{\DocTitle}{Título del documento}
+\renewcommand{\DocSubtitle}{Subtítulo cálido, claro y editorial para explicar el propósito del artefacto}
+\renewcommand{\DocAuthor}{Tu Nombre}
+\renewcommand{\DocRole}{Rol o equipo}
+\renewcommand{\DocDate}{\today}
+\renewcommand{\DocRef}{DOC-001}
+\renewcommand{\DocFooter}{claudeeditorial latex}
+
+\hypersetup{
+  pdftitle={Título del documento},
+  pdfauthor={Tu Nombre}
+}
+
+\ClaudeRunningHeader
+\setstretch{1.22}
+
+\begin{document}
+\BodyCopy
+
+\ClaudeCover
+
+\begin{claudehero}
+\ClaudeLead{Escribe aquí el resumen ejecutivo: una idea principal, el contexto suficiente y la promesa del documento. El estilo está pensado para documentos largos que necesitan rigor sin perder calidez.}
+\end{claudehero}
+
+\section{Resumen}
+
+Esta sección contiene el cuerpo inicial del documento. Puedes combinar texto normal con \Highlight{realces suaves}, \Tag{etiquetas}, badges, métricas y cajas editoriales.
+
+\begin{tcbraster}[raster columns=3,raster equal height=rows,raster column skip=8pt]
+\ClaudeStat{Bloques}{20+}{Componentes reutilizables para informes, propuestas y notas.}
+\ClaudeStat{Paleta}{Warm}{Terracota, pergamino, marfil y grises orgánicos.}
+\ClaudeStat{Salida}{PDF}{Compilación recomendada con XeLaTeX o LuaLaTeX.}
+\end{tcbraster}
+
+\section{Decisión}
+
+\begin{claudedecision}{Criterio principal}
+Usa este bloque para fijar una recomendación, una conclusión o una postura clara. El acento terracota debe reservarse para momentos de decisión real.
+\end{claudedecision}
+
+\section{Próximos pasos}
+
+\begin{claudechecklist}{Checklist}
+\begin{itemize}
+\item ajustar metadatos;
+\item escribir el resumen ejecutivo;
+\item sustituir los ejemplos por contenido real;
+\item compilar y revisar saltos de página.
+\end{itemize}
+\end{claudechecklist}
+
+\ClaudeSignature{\DocAuthor}{\DocRole}
+
+\end{document}
