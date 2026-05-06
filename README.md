@@ -19,6 +19,12 @@ demostraciones y bibliografía. Compila igual en MiKTeX, TeX Live, MacTeX y
 [![Status: public template](https://img.shields.io/badge/status-public%20template-c96442.svg)](#proyecto-no-oficial)
 [![Made with: tcolorbox + TikZ](https://img.shields.io/badge/made%20with-tcolorbox%20%2B%20TikZ-87867f.svg)](#dependencias-latex)
 
+<img src="docs/preview/images/banner/og-banner-1x.png" alt="Claude Editorial LaTeX — el kit LaTeX para tu diario de trabajo y los borradores de tus papers académicos" width="800"/>
+
+<sub>Tarjeta Open Graph 1280×640 — la subimos como <i>Social preview</i> del repo y como primera imagen del post de lanzamiento.<br/>Versión @2x retina y notas de re-render en <a href="docs/preview/images/banner/">docs/preview/images/banner/</a>.</sub>
+
+<br/>
+
 <img src="docs/preview/images/research-paper-1.png" alt="Portada de paper académico — claudeeditorial" width="540"/>
 
 </div>

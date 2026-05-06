@@ -70,10 +70,13 @@ Repositorio publicado: <https://github.com/patri-png/Claude-Editorial-LaTeX>
   del paper hero, sube primero la galería (los PDFs y los PNG están en
   `docs/preview/`) y deja que pasen unas horas para que LinkedIn cachee
   el OG-image del README.
-- Considera adjuntar como imagen del post el PNG de portada
-  `docs/preview/images/research-paper-1.png` o
-  `docs/preview/images/main-1.png`: las dos transmiten muy bien el
-  lenguaje visual del kit en el feed.
+- **Imagen recomendada**: `docs/preview/images/banner/og-banner-1x.png`
+  (1280×640, ~210 KB). Es la tarjeta Open Graph del repo: lockup
+  «Claude Editorial LaTeX» a la izquierda + tarjeta de paper de muestra
+  a la derecha sobre fondo `#0d1117`. Render directo, ratio LinkedIn
+  óptimo. Si por algún motivo prefieres una página interior del kit,
+  `docs/preview/images/research-paper-1.png` y `main-1.png` también
+  transmiten bien la propuesta editorial.
 - Para un segundo post de seguimiento, podrías destacar uno solo de los
   showcases (por ejemplo el de Trazabilidad o el de EGARCH) con su
   thumbnail de `docs/preview/images/`, y enlazar al PDF correspondiente
